@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FHE.Controls;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -21,6 +22,12 @@ namespace FHE
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Add_Level_Click(object sender, RoutedEventArgs e)
+        {
+            HierarchyLevel addingCanvas = new HierarchyLevel();
+            this.stackLevel.Children.Insert(this.stackLevel.Children.Count - 1, addingCanvas);
         }
     }
 }
