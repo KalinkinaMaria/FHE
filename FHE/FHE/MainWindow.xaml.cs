@@ -29,5 +29,18 @@ namespace FHE
             HierarchyLevel addingCanvas = new HierarchyLevel();
             this.stackLevel.Children.Insert(this.stackLevel.Children.Count - 1, addingCanvas);
         }
+
+        private void Grid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            HierarchyNode addingNode = new HierarchyNode();
+            addingNode.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+            addingNode.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+            addingNode.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+            addingNode.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+            addingNode.textNode.Text = "X0" + (this.targetLevel.ColumnDefinitions.Count + 1);
+            Grid.SetColumn(addingNode, this.targetLevel.ColumnDefinitions.Count);
+            this.targetLevel.ColumnDefinitions.Add(new ColumnDefinition());
+            this.targetLevel.Children.Add(addingNode);
+        }
     }
 }

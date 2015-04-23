@@ -5,17 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="300">
-    <Grid Margin="1" MouseLeftButtonUp="Grid_MouseLeftButtonUp">
-        <Grid x:Name="stackNode" Height="50" Background="White" Margin="-1" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
-            <Grid.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform ScaleX="-1"/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Grid.RenderTransform>
-        </Grid>
+    <Grid MouseLeftButtonUp="Grid_MouseLeftButtonUp">
+        <Grid x:Name="stackNode" Height="50" Background="White" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="1"/>
         <Button HorizontalAlignment="Right" VerticalAlignment="Top" Height="15" Width="15" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}" Click="Delete_Level">
             <Button.ContentTemplate>
                 <DataTemplate>

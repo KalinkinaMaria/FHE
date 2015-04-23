@@ -25,7 +25,7 @@
         <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Background="Gray">
             <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Background="Black" Padding="1">
                 <StackPanel Orientation="Vertical" x:Name="stackLevel">
-                    <Grid Height="50" Background="White" Margin="1"/>
+                    <Grid x:Name="targetLevel" Height="50" Background="White" Margin="1" MouseLeftButtonUp="Grid_MouseLeftButtonUp"/>
                     <Button Height="50" Click="Add_Level_Click" Background="#FFFF99" BorderBrush="{x:Null}" Foreground="{x:Null}">
                         <Button.ContentTemplate>
                             <DataTemplate>

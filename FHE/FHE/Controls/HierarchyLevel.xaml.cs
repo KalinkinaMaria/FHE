@@ -18,7 +18,6 @@ namespace FHE.Controls
     /// </summary>
     public partial class HierarchyLevel : UserControl
     {
-        private int _indexLevel;
         public HierarchyLevel()
         {
             InitializeComponent();
@@ -36,6 +35,7 @@ namespace FHE.Controls
             addingNode.VerticalAlignment = System.Windows.VerticalAlignment.Center;
             addingNode.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
             addingNode.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+            addingNode.textNode.Text = "X" + ((this.Parent as StackPanel).Children.Count - 2) + (this.stackNode.ColumnDefinitions.Count + 1);
             Grid.SetColumn(addingNode, this.stackNode.ColumnDefinitions.Count);
             this.stackNode.ColumnDefinitions.Add(new ColumnDefinition());
             this.stackNode.Children.Add(addingNode);
