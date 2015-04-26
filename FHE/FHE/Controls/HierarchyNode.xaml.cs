@@ -18,6 +18,9 @@ namespace FHE.Controls
     /// </summary>
     public partial class HierarchyNode : UserControl
     {
+        private static int global_id = 1;
+        private int id;
+
         public delegate void addEdgeClick(object sender, RoutedEventArgs e);
 
         public event addEdgeClick onAddEdgeClick;
@@ -25,6 +28,36 @@ namespace FHE.Controls
         public HierarchyNode()
         {
             InitializeComponent();
+            id = global_id;
+            global_id += 1;
+        }
+
+        public HierarchyNode(int id)
+        {
+            InitializeComponent();
+            id = id;
+        }
+
+        public int getId()
+        {
+            return id;
+        }
+
+        public void delete()
+        {
+            int currentcolumn = Grid.GetColumn(this);
+            
+            foreach(HierarchyNode Node in (this.Parent as Grid).Children)
+            {
+                if (Grid.GetColumn(Node) > currentcolumn)
+                {
+                    Grid.SetColumn(Node, Grid.GetColumn(Node) - 1);
+                }
+            }
+
+            (this.Parent as Grid).ColumnDefinitions.RemoveAt((this.Parent as Grid).ColumnDefinitions.Count - 1);
+
+            (this.Parent as Grid).Children.Remove(this);
         }
 
         private void Grid_MouseEnter(object sender, MouseEventArgs e)
@@ -41,8 +74,7 @@ namespace FHE.Controls
 
         private void deleteNode_Click(object sender, RoutedEventArgs e)
         {
-            (this.Parent as Grid).ColumnDefinitions.RemoveAt(Grid.GetColumn(this));
-            (this.Parent as Grid).Children.Remove(this);
+            this.delete();
         }
 
         private void addEdge_Click(object sender, RoutedEventArgs e)
@@ -50,6 +82,20 @@ namespace FHE.Controls
             if (this.onAddEdgeClick != null)
             {
                 this.onAddEdgeClick(this, e);
+            }
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            if (e.LeftButton == MouseButtonState.Pressed && !this.textNode.Text.Contains("Q"))
+            {
+                // Package the data.
+                DataObject data = new DataObject();
+                data.SetData("Object", this);
+
+                // Inititate the drag-and-drop operation.
+                DragDrop.DoDragDrop(this, data, DragDropEffects.Move);
             }
         }
     }

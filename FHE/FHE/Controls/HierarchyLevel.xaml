@@ -6,7 +6,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="300">
     <Grid MouseLeftButtonUp="Grid_MouseLeftButtonUp">
-        <Grid x:Name="stackNode" Height="50" Background="White" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="1"/>
+        <Grid x:Name="stackNode" Height="50" Background="White" 
+              VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" 
+              Margin="1" AllowDrop="True" Drop="panel_Drop" DragOver="panel_DragOver"/>
         <Button HorizontalAlignment="Right" VerticalAlignment="Top" Height="15" Width="15" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}" Click="Delete_Level">
             <Button.ContentTemplate>
                 <DataTemplate>
