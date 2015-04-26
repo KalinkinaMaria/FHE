@@ -32,15 +32,20 @@ namespace FHE
 
         private void Grid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            HierarchyNode addingNode = new HierarchyNode();
+            HierachyGoal addingNode = new HierachyGoal();
             addingNode.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
             addingNode.VerticalAlignment = System.Windows.VerticalAlignment.Center;
             addingNode.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
             addingNode.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
-            addingNode.textNode.Text = "X0" + (this.targetLevel.ColumnDefinitions.Count + 1);
+            addingNode.textNode.Text = "Q" + (this.targetLevel.ColumnDefinitions.Count + 1);
             Grid.SetColumn(addingNode, this.targetLevel.ColumnDefinitions.Count);
             this.targetLevel.ColumnDefinitions.Add(new ColumnDefinition());
             this.targetLevel.Children.Add(addingNode);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -39,6 +39,6 @@
             </ScrollViewer>
         </Grid>
         <Button Grid.Row="3" Grid.Column="0" Width="100" Height="25" Margin="5" HorizontalAlignment="Left" Content="Назад" IsEnabled="False"/>
-        <Button Grid.Row="3" Grid.Column="1" Width="100" Height="25" Margin="5" HorizontalAlignment="Right" Content="Вперед"/>
+        <Button Grid.Row="3" Grid.Column="1" Width="100" Height="25" Margin="5" HorizontalAlignment="Right" Content="Вперед" Click="Button_Click"/>
     </Grid>
 </Window>
