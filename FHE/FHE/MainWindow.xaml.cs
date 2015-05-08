@@ -19,8 +19,17 @@ namespace FHE
     /// </summary>
     public partial class MainWindow : Window
     {
+        public enum Mode {EDIT_HIERARCHY, EDIT_FUNC_LINK, EDIT_FUNK_MEMBERSHIP, CALC_RESULT};
+
+        public static Mode _mode
+        {
+            get;
+            private set;
+        }
+
         public MainWindow()
         {
+            _mode = Mode.EDIT_HIERARCHY;
             InitializeComponent();
         }
 
@@ -43,9 +52,47 @@ namespace FHE
             this.targetLevel.Children.Add(addingNode);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Mode_Up(object sender, RoutedEventArgs e)
         {
+            switch (_mode)
+            {
+                case Mode.EDIT_HIERARCHY:
+                    _mode = Mode.EDIT_FUNC_LINK;
+                    this.back.IsEnabled = true;
+                    break;
+                case Mode.EDIT_FUNC_LINK:
+                    _mode = Mode.EDIT_FUNK_MEMBERSHIP;
+                    this.forward.Content = "Рассчитать";
+                    break;
+                case Mode.EDIT_FUNK_MEMBERSHIP:
+                    _mode = Mode.CALC_RESULT;
+                    this.forward.IsEnabled = false;
+                    //TO DO открыть окно с рассчетом
+                    break;
+                case Mode.CALC_RESULT:
+                    break;
+            }
+        }
 
+        private void Mode_Down(object sender, RoutedEventArgs e)
+        {
+            switch (_mode)
+            {
+                case Mode.EDIT_HIERARCHY:
+                    break;
+                case Mode.EDIT_FUNC_LINK:
+                    _mode = Mode.EDIT_HIERARCHY;
+                    this.back.IsEnabled = false;
+                    break;
+                case Mode.EDIT_FUNK_MEMBERSHIP:
+                    _mode = Mode.EDIT_FUNC_LINK;
+                    this.forward.Content = "Вперед";
+                    break;
+                case Mode.CALC_RESULT:
+                    this.forward.IsEnabled = true;
+                    _mode = Mode.EDIT_FUNK_MEMBERSHIP;
+                    break;
+            }
         }
     }
 }
