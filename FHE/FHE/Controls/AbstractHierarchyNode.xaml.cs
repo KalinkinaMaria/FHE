@@ -15,63 +15,37 @@ using System.Windows.Shapes;
 namespace FHE.Controls
 {
     /// <summary>
-    /// Interaction logic for HierachyGoal.xaml
+    /// Interaction logic for AbstractHierarchyNode.xaml
     /// </summary>
-    public partial class HierarchyGoal : UserControl
+    abstract public partial class AbstractHierarchyNode : UserControl
     {
         public delegate void ChangeEventHandler();
 
         public event ChangeEventHandler onChange;
 
-        public static SolidColorBrush defaultColor = new SolidColorBrush(Color.FromRgb(255,215,0));
-
-        public List<HierarchyNode> childrenNode
-        {
-            get;
-            private set;
-        }
         public string name
         {
             get;
             private set;
         }
 
-        public int getId()
+        public List<HierarchyNode> childrenNode
         {
-            return Convert.ToInt32(this.textNode.Text.Remove(0, 1));
+            get;
+            private set;
         }
 
-        public HierarchyGoal()
+        public AbstractHierarchyNode()
         {
             InitializeComponent();
             childrenNode = new List<HierarchyNode>();
-        }
-
-        private void Grid_MouseLeave(object sender, MouseEventArgs e)
-        {
-            if (MainWindow.mode == MainWindow.Mode.EDIT_HIERARCHY)
-            {
-                this.deleteNode.Visibility = System.Windows.Visibility.Hidden;
-                this.addEdge.Visibility = System.Windows.Visibility.Hidden;
-                this.renameNode.Visibility = System.Windows.Visibility.Hidden;
-            }
-        }
-
-        private void Grid_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (MainWindow.mode == MainWindow.Mode.EDIT_HIERARCHY)
-            {
-                this.deleteNode.Visibility = System.Windows.Visibility.Visible;
-                this.addEdge.Visibility = System.Windows.Visibility.Visible;
-                this.renameNode.Visibility = System.Windows.Visibility.Visible;
-            }
         }
 
         public void delete()
         {
             int currentcolumn = Grid.GetColumn(this);
 
-            foreach (HierarchyGoal Node in (this.Parent as Grid).Children)
+            foreach (AbstractHierarchyNode Node in (this.Parent as Grid).Children)
             {
                 if (Grid.GetColumn(Node) > currentcolumn)
                 {
@@ -84,6 +58,36 @@ namespace FHE.Controls
             (this.Parent as Grid).Children.Remove(this);
         }
 
+        public bool containsDependence()
+        {
+            return childrenNode.Count != 0;
+        }
+
+        public void fairOnChange()
+        {
+            onChange();
+        }
+
+        private void Grid_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (MainWindow.mode == MainWindow.Mode.EDIT_HIERARCHY)
+            {
+                this.deleteNode.Visibility = System.Windows.Visibility.Visible;
+                this.addEdge.Visibility = System.Windows.Visibility.Visible;
+                this.renameNode.Visibility = System.Windows.Visibility.Visible;
+            }
+        }
+
+        private void Grid_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (MainWindow.mode == MainWindow.Mode.EDIT_HIERARCHY)
+            {
+                this.deleteNode.Visibility = System.Windows.Visibility.Hidden;
+                this.addEdge.Visibility = System.Windows.Visibility.Hidden;
+                this.renameNode.Visibility = System.Windows.Visibility.Hidden;
+            }
+        }
+
         private void deleteNode_Click(object sender, RoutedEventArgs e)
         {
             this.delete();
@@ -93,8 +97,13 @@ namespace FHE.Controls
 
         private void addEdge_Click(object sender, RoutedEventArgs e)
         {
-            EditEdge text = new EditEdge(this);
-            text.ShowDialog();  
+            EditEdge text = null;
+            if (this is HierarchyNode)
+                text = new EditEdge(this as HierarchyNode);
+            else
+                text = new EditEdge(this as HierarchyGoal);
+            text.onChange += this.fairOnChange;
+            text.ShowDialog();
         }
 
         private void renameNode_Click(object sender, RoutedEventArgs e)
