@@ -37,6 +37,7 @@ namespace FHE.Controls
         public HierarchyNode(int id)
         {
             InitializeComponent();
+            this.formNode.Fill = Brushes.LightGreen;
             this.id = id;
         }
 

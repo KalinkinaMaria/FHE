@@ -19,19 +19,15 @@ namespace FHE.Controls
         {
         }
 
-        private void addNode(int number)
+        private void addNode(HierarchyNode node)
         {
-            HierarchyNode addingNode = new HierarchyNode(number);
-            addingNode.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-            addingNode.VerticalAlignment = System.Windows.VerticalAlignment.Center;
-            addingNode.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
-            addingNode.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
-            addingNode.textNode.Text = "X" + number;
-            Grid.SetColumn(addingNode, this.stackNode.ColumnDefinitions.Count);
+            node.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+            node.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+            node.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+            node.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+            Grid.SetColumn(node, this.stackNode.ColumnDefinitions.Count);
             this.stackNode.ColumnDefinitions.Add(new ColumnDefinition());
-            this.stackNode.Children.Add(addingNode);
-
-            addingNode.onChange += this.fairOnChange;
+            this.stackNode.Children.Add(node);
         }
 
         protected override void add()
@@ -61,13 +57,22 @@ namespace FHE.Controls
 
                     if (_parent != null)
                     {
-                        int id = _element.id;
                         _element.delete();
-                        this.addNode(id);
+                        addNode(_element);
+
+                        foreach (AbstractHierarchyNode parentNode in _element.ParentNode)
+                        {
+                            if ((((parentNode.Parent as Grid).Parent as Grid).Parent as HierarchyLevel).Number >=
+                                (((_element.Parent as Grid).Parent as Grid).Parent as HierarchyLevel).Number)
+                            {
+                                parentNode.removeChild(_element);
+                            }
+                        }
+
                         e.Effects = DragDropEffects.Move;
                     }
                 }
-                //onChange();
+                fairOnChange();
             }
         }
     }

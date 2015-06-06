@@ -67,6 +67,14 @@ namespace FHE.Controls
 
         private void Delete_Level(object sender, RoutedEventArgs e)
         {
+            foreach (HierarchyNode node in this.stackNode.Children)
+            {
+                foreach (AbstractHierarchyNode parentNode in node.ParentNode)
+                {
+                    parentNode.removeChild(node);
+                }
+            }
+
             (this.Parent as StackPanel).Children.Remove(this);
 
             onChange();

@@ -67,7 +67,9 @@ namespace FHE.Windows
             this.nameWindow.Content = _foreword + "Q" + goal.getId() + " (" + goal.name + ")";
             this.fillEdge(goal.childrenNode);
             Grid t = (goal.Parent as Grid);
-            StackPanel stackLevel = (t.Parent as StackPanel);
+            t = t.Parent as Grid;
+            HierarchyLevel r = t.Parent as HierarchyLevel;
+            StackPanel stackLevel = (r.Parent as StackPanel);
             for (i = 1; i < stackLevel.Children.Count - 1; i++ )
             {
                 List<HierarchyNode> list = ((HierarchyLevel)stackLevel.Children[i]).getNodes();
@@ -117,11 +119,13 @@ namespace FHE.Windows
             if (_node != null)
             {
                 _node.addChild(mapNode[index]);
+                mapNode[index].ParentNode.Add(_node);
                 descEdge = new DescriptionEdge(this.listNode.SelectedValue as string, _node, this);
             }
             else if (_goal != null)
             {
                 _goal.addChild(mapNode[index]);
+                mapNode[index].ParentNode.Add(_goal);
                 descEdge = new DescriptionEdge(this.listNode.SelectedValue as string, _goal, this);
             }
             else
