@@ -23,6 +23,22 @@ namespace FHE.Controls
 
         public event ChangeEventHandler onChange;
 
+        private string LinkFunc;
+
+        public Point Position
+        {
+            get
+            {
+                int level = (((this.Parent as Grid).Parent as Grid).Parent as HierarchyLevel).Number;
+                int column = Grid.GetColumn(this);
+                int columns = (this.Parent as Grid).Children.Count;
+                double width = (this.Parent as Grid).ActualWidth;
+                double x = width / (columns * 2) * ((column + 1) * 2 - 1);
+                double y = 50*level-25;
+                return new Point(x, y);
+            }
+        }
+
         public string name
         {
             get;
@@ -35,10 +51,49 @@ namespace FHE.Controls
             private set;
         }
 
+        public List<AbstractHierarchyNode> ParentNode
+        {
+            get;
+            set;
+        }
+
+        public void addChild(HierarchyNode node)
+        {
+            this.childrenNode.Add(node);
+        }
+
+        public void removeChild(int index)
+        {
+            foreach (HierarchyNode node in childrenNode)
+            {
+                if (node.id == index)
+                {
+                    childrenNode.Remove(node);
+                    return;
+                }
+            }
+        }
+
+        public void removeChild(AbstractHierarchyNode node)
+        {
+            childrenNode.Remove(node as HierarchyNode);
+        }
+
+        public bool containsChild (int index)
+        {
+            foreach (HierarchyNode node in childrenNode)
+            {
+                if (node.id == index)
+                    return true;
+            }
+            return false;
+        }
+
         public AbstractHierarchyNode()
         {
             InitializeComponent();
             childrenNode = new List<HierarchyNode>();
+            ParentNode = new List<AbstractHierarchyNode>();
         }
 
         public void delete()
@@ -76,6 +131,10 @@ namespace FHE.Controls
                 this.addEdge.Visibility = System.Windows.Visibility.Visible;
                 this.renameNode.Visibility = System.Windows.Visibility.Visible;
             }
+            else if (MainWindow.mode == MainWindow.Mode.EDIT_FUNC_LINK)
+            {
+                this.addFuncLink.Visibility = System.Windows.Visibility.Visible;
+            }
         }
 
         private void Grid_MouseLeave(object sender, MouseEventArgs e)
@@ -86,10 +145,18 @@ namespace FHE.Controls
                 this.addEdge.Visibility = System.Windows.Visibility.Hidden;
                 this.renameNode.Visibility = System.Windows.Visibility.Hidden;
             }
+            else if (MainWindow.mode == MainWindow.Mode.EDIT_FUNC_LINK)
+            {
+                this.addFuncLink.Visibility = System.Windows.Visibility.Hidden;
+            }
         }
 
         private void deleteNode_Click(object sender, RoutedEventArgs e)
         {
+            foreach (AbstractHierarchyNode parentNode in this.ParentNode)
+            {
+                parentNode.removeChild(this);
+            }
             this.delete();
 
             onChange();
@@ -112,6 +179,22 @@ namespace FHE.Controls
             text.ShowDialog();
             name = text.getName();
             this.parent.ToolTip = this.name;
+        }
+
+        private void addFuncLink_Click(object sender, RoutedEventArgs e)
+        {
+            EditFuncLink window = new EditFuncLink(this);
+            window.ShowDialog();
+
+            this.LinkFunc = window.getFuncLink();
+            setColorForm();
+        }
+
+        abstract public void setColorForm();
+
+        private void addMembershipFunc_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
