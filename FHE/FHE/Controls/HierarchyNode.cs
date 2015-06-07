@@ -54,5 +54,10 @@ namespace FHE.Controls
                 DragDrop.DoDragDrop(this, data, DragDropEffects.Move);
             }
         }
+
+        public override void setColorForm()
+        {
+            this.formNode.Fill = Brushes.LightGreen;
+        }
     }
 }

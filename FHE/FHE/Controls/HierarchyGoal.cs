@@ -30,5 +30,10 @@ namespace FHE.Controls
             InitializeComponent();
             this.formNode.Fill = Brushes.Gold;
         }
+
+        public override void setColorForm()
+        {
+            this.formNode.Fill = Brushes.Gold;
+        }
     }
 }
