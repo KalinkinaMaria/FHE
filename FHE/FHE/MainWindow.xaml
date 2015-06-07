@@ -28,7 +28,7 @@
                 <Grid>
                     <Canvas x:Name="canvasLines" Background="White"/>
                     <StackPanel Orientation="Vertical" x:Name="stackLevel">
-                        <Button Height="50" Click="Add_Level_Click" Background="#FFFF99" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                        <Button x:Name="addLevel" Height="50" Click="Add_Level_Click" Background="#FFFF99" BorderBrush="{x:Null}" Foreground="{x:Null}">
                             <Button.ContentTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">

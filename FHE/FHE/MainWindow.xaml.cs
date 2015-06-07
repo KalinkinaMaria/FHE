@@ -77,7 +77,12 @@ namespace FHE
 
         private void paint_node_for_func_link()
         {
+            int count = this.stackLevel.Children.Count;
 
+            for (int i = 0; i < count - 2; i++)
+            {
+                (this.stackLevel.Children[i] as HierarchyLevel).paint_node_for_func_link();
+            }
         }
 
         private void close_function()
@@ -96,13 +101,9 @@ namespace FHE
 
             int count = this.stackLevel.Children.Count;
 
-            for (int i = 0; i < count - 1; i++)
+            for (int i = 0; i < count - 2; i++)
             {
-                if ((this.stackLevel.Children[i] is Grid))
-                {
-                    //проверить цели
-                }
-                else if (!(this.stackLevel.Children[i] as HierarchyLevel).containsDependence())
+                if (!(this.stackLevel.Children[i] as HierarchyLevel).containsDependence())
                 {
                     result = false;
                     return result;
@@ -127,8 +128,9 @@ namespace FHE
                     }
 
                     mode = Mode.EDIT_FUNC_LINK;
-                    this.nameMode.Text = "Определение зависимости между характеристиками путем задания функций связи";
+                    this.nameMode.Text = "Определение зависимости между характеристиками путем задания функций связи (для выделенных вершин)";
                     this.back.IsEnabled = true;
+                    this.addLevel.Visibility = System.Windows.Visibility.Hidden;
 
                     //TO DO Закрасить вершины, для которых неодходимо добавить функции связи
                     close_function();
@@ -161,6 +163,7 @@ namespace FHE
                     mode = Mode.EDIT_HIERARCHY;
                     this.back.IsEnabled = false;
                     this.nameMode.Text = "Создание иерархии характеристик";
+                    this.addLevel.Visibility = System.Windows.Visibility.Visible;
                     //TO DO Отменить закрашивание
                     break;
                 case Mode.EDIT_FUNK_MEMBERSHIP:
