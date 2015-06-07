@@ -39,7 +39,7 @@ namespace FHE.Controls
             bool result = false;
             for (int i = 0; i < this.stackNode.Children.Count; i++)
             {
-                if ((this.stackNode.Children[i] as HierarchyNode).containsDependence())
+                if ((this.stackNode.Children[i] as AbstractHierarchyNode).containsDependence())
                 {
                     result = true;
                     return result;
@@ -88,6 +88,14 @@ namespace FHE.Controls
             {
                 this.add();
                 onChange();
+            }
+        }
+
+        public void paint_node_for_func_link()
+        {
+            for (int i = 0; i < this.stackNode.Children.Count; i++)
+            {
+                (this.stackNode.Children[i] as AbstractHierarchyNode).formNode.Fill = Brushes.MediumBlue;
             }
         }
     }
