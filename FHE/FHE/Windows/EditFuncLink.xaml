@@ -1,0 +1,26 @@
+﻿<Window x:Class="FHE.Windows.EditFuncLink"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="EditFuncLink" Height="250" Width="300" 
+        MinHeight="250" MaxHeight="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="Введите функцию связи для вершины:" TextWrapping="WrapWithOverflow"/>
+        <TextBlock x:Name="nameCurrentNode" Grid.Row="1"  TextWrapping="WrapWithOverflow"/>
+        <TextBlock Grid.Row="2" Text="зависимую от:" TextWrapping="WrapWithOverflow"/>
+        <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto">
+            <TextBlock x:Name="nameChildren" Grid.Row="3"  TextWrapping="WrapWithOverflow" />
+        </ScrollViewer>
+        <TextBox x:Name="nameFunc" Grid.Row="4" Height="25" VerticalAlignment="Center" />
+        <TextBlock Grid.Row="5" Text="Примечание: функция должна быть неприрывной и монотонно возрастающей" TextWrapping="WrapWithOverflow"/>
+        <Button Grid.Row="6" Height="25" Width="100" Content="OK" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="Button_Click"/>
+    </Grid>
+</Window>
