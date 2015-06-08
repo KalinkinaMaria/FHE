@@ -21,6 +21,7 @@ namespace FHE.Windows
         private enum CurrentValue {NONE, OPERATION, X, CONST, POINT, NULL, CLOSE_BRACKET, VAR, FLOAT};
         private AbstractHierarchyNode _currentNode;
         private List<String> args = new List<String>();
+        private bool _isCorrect = false;
 
         public EditFuncLink(AbstractHierarchyNode currentNode)
         {
@@ -41,6 +42,11 @@ namespace FHE.Windows
         public string getFuncLink()
         {
             return this.nameFunc.Text;
+        }
+
+        public bool isCorrect()
+        {
+            return this._isCorrect;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -128,6 +134,7 @@ namespace FHE.Windows
                 return;
             }
 
+            _isCorrect = true;
             this.Close();
         }
 

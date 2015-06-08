@@ -36,12 +36,12 @@ namespace FHE.Controls
 
         public bool containsDependence()
         {
-            bool result = false;
+            bool result = true;
             for (int i = 0; i < this.stackNode.Children.Count; i++)
             {
-                if ((this.stackNode.Children[i] as AbstractHierarchyNode).containsDependence())
+                if (!(this.stackNode.Children[i] as AbstractHierarchyNode).containsDependence())
                 {
-                    result = true;
+                    result = false;
                     return result;
                 }
             }
@@ -97,6 +97,21 @@ namespace FHE.Controls
             {
                 (this.stackNode.Children[i] as AbstractHierarchyNode).formNode.Fill = Brushes.MediumBlue;
             }
+        }
+
+        internal bool containsFuncLink()
+        {
+            bool result = true;
+            for (int i = 0; i < this.stackNode.Children.Count; i++)
+            {
+                if ((this.stackNode.Children[i] as AbstractHierarchyNode).LinkFunc == ""
+                    || (this.stackNode.Children[i] as AbstractHierarchyNode).LinkFunc == null)
+                {
+                    result = false;
+                    return result;
+                }
+            }
+            return result;
         }
     }
 }

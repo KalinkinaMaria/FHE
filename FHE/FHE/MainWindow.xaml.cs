@@ -98,16 +98,31 @@ namespace FHE
         private bool is_correct()
         {
             bool result = true;
-
             int count = this.stackLevel.Children.Count;
-
-            for (int i = 0; i < count - 2; i++)
+            switch (mode)
             {
-                if (!(this.stackLevel.Children[i] as HierarchyLevel).containsDependence())
-                {
-                    result = false;
-                    return result;
-                }
+                case Mode.EDIT_HIERARCHY: 
+
+                    for (int i = 0; i < count - 2; i++)
+                    {
+                        if (!(this.stackLevel.Children[i] as HierarchyLevel).containsDependence())
+                        {
+                            result = false;
+                            return result;
+                        }
+                    }
+                break;
+                case Mode.EDIT_FUNC_LINK:
+
+                    for (int i = 0; i < count - 2; i++)
+                    {
+                        if (!(this.stackLevel.Children[i] as HierarchyLevel).containsFuncLink())
+                        {
+                            result = false;
+                            return result;
+                        }
+                    }
+                break;
             }
 
             return result;
@@ -118,7 +133,7 @@ namespace FHE
             switch (mode)
             {
                 case Mode.EDIT_HIERARCHY:
-                    //TO DO Проверка корректности введенного графа
+                    //Проверка корректности введенного графа
                     if (!is_correct())
                     {
                         //переделать сообщ.
@@ -137,6 +152,14 @@ namespace FHE
                     paint_node_for_func_link();
                     break;
                 case Mode.EDIT_FUNC_LINK:
+                    //Проверка заполненности всех ф-ций связи
+                    if (!is_correct())
+                    {
+                        //переделать сообщ.
+                        System.Windows.MessageBox.Show(this, "Не для всех характеристик были введены ф-ции связи.",
+               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
                     mode = Mode.EDIT_FUNK_MEMBERSHIP;
                     this.nameMode.Text = "Определение желательности достижения цели и возможности реализации характеристик";
                     this.forward.Content = "Рассчитать";

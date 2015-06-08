@@ -23,7 +23,11 @@ namespace FHE.Controls
 
         public event ChangeEventHandler onChange;
 
-        private string LinkFunc;
+        public string LinkFunc
+        {
+            get;
+            private set;
+        }
 
         public Point Position
         {
@@ -186,8 +190,11 @@ namespace FHE.Controls
             EditFuncLink window = new EditFuncLink(this);
             window.ShowDialog();
 
-            this.LinkFunc = window.getFuncLink();
-            setColorForm();
+            if (window.isCorrect())
+            {
+                this.LinkFunc = window.getFuncLink();
+                setColorForm();
+            }
         }
 
         abstract public void setColorForm();
