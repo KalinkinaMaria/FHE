@@ -23,6 +23,14 @@ namespace FHE.Controls
 
         public event ChangeEventHandler onChange;
 
+        public List<Point> MembershipFunction = new List<Point>();
+
+        public bool IsNeedFuncLink
+        {
+            get;
+            set;
+        }
+
         public string LinkFunc
         {
             get;
@@ -96,6 +104,8 @@ namespace FHE.Controls
         public AbstractHierarchyNode()
         {
             InitializeComponent();
+            LinkFunc = "";
+            IsNeedFuncLink = false;
             childrenNode = new List<HierarchyNode>();
             ParentNode = new List<AbstractHierarchyNode>();
         }
@@ -135,9 +145,13 @@ namespace FHE.Controls
                 this.addEdge.Visibility = System.Windows.Visibility.Visible;
                 this.renameNode.Visibility = System.Windows.Visibility.Visible;
             }
-            else if (MainWindow.mode == MainWindow.Mode.EDIT_FUNC_LINK)
+            else if (MainWindow.mode == MainWindow.Mode.EDIT_FUNC_LINK && this.IsNeedFuncLink)
             {
                 this.addFuncLink.Visibility = System.Windows.Visibility.Visible;
+            }
+            else if (MainWindow.mode == MainWindow.Mode.EDIT_FUNK_MEMBERSHIP)
+            {
+                this.addMembershipFunc.Visibility = System.Windows.Visibility.Visible;
             }
         }
 
@@ -152,6 +166,10 @@ namespace FHE.Controls
             else if (MainWindow.mode == MainWindow.Mode.EDIT_FUNC_LINK)
             {
                 this.addFuncLink.Visibility = System.Windows.Visibility.Hidden;
+            }
+            else if (MainWindow.mode == MainWindow.Mode.EDIT_FUNK_MEMBERSHIP)
+            {
+                this.addMembershipFunc.Visibility = System.Windows.Visibility.Hidden;
             }
         }
 
@@ -201,7 +219,8 @@ namespace FHE.Controls
 
         private void addMembershipFunc_Click(object sender, RoutedEventArgs e)
         {
-
+            EditMembershipFunc window = new EditMembershipFunc(this);
+            window.ShowDialog();
         }
     }
 }

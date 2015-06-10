@@ -188,6 +188,7 @@ namespace FHE
                     this.nameMode.Text = "Создание иерархии характеристик";
                     this.addLevel.Visibility = System.Windows.Visibility.Visible;
                     //TO DO Отменить закрашивание
+                    paint_node_for_start();
                     break;
                 case Mode.EDIT_FUNK_MEMBERSHIP:
                     mode = Mode.EDIT_FUNC_LINK;
@@ -201,6 +202,16 @@ namespace FHE
                     mode = Mode.EDIT_FUNK_MEMBERSHIP;
                     //TO DO Закрасить вершины, для которых неодходимо добавить функции принадлежности
                     break;
+            }
+        }
+
+        private void paint_node_for_start()
+        {
+            int count = this.stackLevel.Children.Count;
+
+            for (int i = 0; i < count - 2; i++)
+            {
+                (this.stackLevel.Children[i] as HierarchyLevel).paint_node_for_start();
             }
         }
     }

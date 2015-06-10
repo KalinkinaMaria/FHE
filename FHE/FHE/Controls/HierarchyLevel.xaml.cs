@@ -95,7 +95,11 @@ namespace FHE.Controls
         {
             for (int i = 0; i < this.stackNode.Children.Count; i++)
             {
-                (this.stackNode.Children[i] as AbstractHierarchyNode).formNode.Fill = Brushes.MediumBlue;
+                if ((this.stackNode.Children[i] as AbstractHierarchyNode).LinkFunc == "")
+                {
+                    (this.stackNode.Children[i] as AbstractHierarchyNode).formNode.Fill = Brushes.MediumBlue;
+                    (this.stackNode.Children[i] as AbstractHierarchyNode).IsNeedFuncLink = true;
+                }
             }
         }
 
@@ -112,6 +116,14 @@ namespace FHE.Controls
                 }
             }
             return result;
+        }
+
+        internal void paint_node_for_start()
+        {
+            for (int i = 0; i < this.stackNode.Children.Count; i++)
+            {
+                (this.stackNode.Children[i] as AbstractHierarchyNode).setColorForm();
+            }
         }
     }
 }

@@ -26,6 +26,7 @@ namespace FHE.Controls
         }
 
         public HierarchyGoal()
+            : base()
         {
             InitializeComponent();
             this.formNode.Fill = Brushes.Gold;
