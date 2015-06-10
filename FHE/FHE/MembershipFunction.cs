@@ -1,14 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 
 namespace FHE
 {
     class MembershipFunction
     {
-        private const float inaccuracy = 0.05f;
+        private const double inaccuracy = 0.05d;
 
-        private List<MFPoint> points;
+        private List<MFPoint> points = new List<MFPoint>();
+
+        public MembershipFunction()
+        {
+        }
+
+        public MembershipFunction(List<Point> Points)
+        {
+            foreach (Point point in Points)
+            {
+                points.Add(new MFPoint(point.X, point.Y));
+            }
+        }
 
         public int countPoints()
         {
@@ -30,7 +43,7 @@ namespace FHE
         private void sortPoint(int first, int last)
         {
 	        int i = first, j = last;
-	        float middle = this.points[(first+last)/2].x;
+            double middle = this.points[(first + last) / 2].x;
 
 	        do {
                 while (this.points[i].x < middle) i++;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FHE.Windows;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,6 +13,14 @@ namespace FHE
             private set;
         }
 
+        public Characteristic(MembershipFunction AchievementCharacteristics, String Name, Function CommunicationFunction)
+            : base()
+        {
+            this.achievementCharacteristics = AchievementCharacteristics;
+            this.name = Name;
+            this.communicationFunction = CommunicationFunction;
+        }
+
         public override void calcMembershipFunc()
         {
             List<List<MFPoint>> merged = null;
@@ -23,6 +32,7 @@ namespace FHE
                 foreach (Node child in children)
                 {
                     child.calcMembershipFunc();
+                    ResultingWindow.IncProgressBar();
                 }
 
                 //создание таблицы сочетаний точек функций принадлежности всех детей узла

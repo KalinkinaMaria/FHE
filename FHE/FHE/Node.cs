@@ -6,18 +6,22 @@ namespace FHE
 {
     abstract class Node
     {
-        protected Function communicationFunction;
-        protected List<Node> children;
+        protected Function communicationFunction = new Function();
+        protected List<Node> children = new List<Node>();
         public String name
         {
             get;
-            private set;
+            protected set;
         }
-        protected int level;
 
         public virtual void calcMembershipFunc()
         {
 
+        }
+
+        public void AddChild(Node Child)
+        {
+            children.Add(Child);
         }
 
         protected List<List<MFPoint>> merge(List<List<MFPoint>> first, MembershipFunction second)
@@ -53,10 +57,10 @@ namespace FHE
 
         protected MFPoint calcMFPoint(List<MFPoint> points)
         {
-            Dictionary<String, float> vars = null;
-            Dictionary<String, float> lambda = null;
-            float x;
-            float y = points[0].y;
+            Dictionary<String, double> vars = null;
+            Dictionary<String, double> lambda = null;
+            double x;
+            double y = points[0].y;
 
             for (int i = 0; i < points.Count; i++)
             {
@@ -67,7 +71,7 @@ namespace FHE
                 }
                 if (points[i].lambda.Count != 0)
                 {
-                    Dictionary<String, float>.KeyCollection keys = points[i].lambda.Keys;
+                    Dictionary<String, double>.KeyCollection keys = points[i].lambda.Keys;
                     foreach (string key in keys)
                     {
                         lambda.Add(key, points[i].lambda[key]);

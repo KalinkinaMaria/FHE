@@ -6,23 +6,29 @@ namespace FHE
 {
     class MFPoint
     {
-        public float x
+        public double x
         {
             get;
             set;
         }
-        public float y
+        public double y
         {
             get;
             private set;
         }
-        public Dictionary<String, float> lambda
+        public Dictionary<String, double> lambda
         {
             get;
             private set;
         }
 
-        public MFPoint(float x, float y, Dictionary<String, float> lambda)
+        public MFPoint(double x, double y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+
+        public MFPoint(double x, double y, Dictionary<String, double> lambda)
         {
             this.x = x;
             this.y = y;

@@ -15,11 +15,16 @@ namespace FHE
             this.representationFunc = representationFunc;
         }
 
-        public float calcResult(Dictionary<String, float> args)
+        public Function()
         {
-            float result = 0;
+            // TODO: Complete member initialization
+        }
 
-            Dictionary<String, float>.KeyCollection keys = args.Keys;
+        public double calcResult(Dictionary<String, double> args)
+        {
+            double result = 0;
+
+            Dictionary<String, double>.KeyCollection keys = args.Keys;
 
             foreach (string key in keys)
             {

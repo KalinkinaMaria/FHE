@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FHE.Windows;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,10 +10,13 @@ namespace FHE
         private MembershipFunction desirabilityGoal;
         private MembershipFunction achievementGoal;
         private MFPoint resultGoal;
- 
-        public Goal()
+
+        public Goal(MembershipFunction DesirabilityGoal, String Name, Function CommunicationFunction)
+            : base()
         {
-            this.level = 1;
+            this.desirabilityGoal = DesirabilityGoal;
+            this.name = Name;
+            this.communicationFunction = CommunicationFunction;
         }
 
         private void culcResultGoal()
@@ -60,6 +64,7 @@ namespace FHE
             foreach (Node child in children)
             {
                 child.calcMembershipFunc();
+                ResultingWindow.IncProgressBar();
             }
 
             //создание таблицы сочетаний точек функций принадлежности всех детей узла
