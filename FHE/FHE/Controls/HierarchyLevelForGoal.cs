@@ -27,5 +27,17 @@ namespace FHE.Controls
 
             addingNode.onChange += this.fairOnChange;
         }
+
+        public List<HierarchyGoal> GetGoals()
+        {
+            List<HierarchyGoal> Results = new List<HierarchyGoal>();
+
+            foreach (HierarchyGoal goal in this.stackNode.Children)
+            {
+                Results.Add(goal);
+            }
+
+            return Results;
+        }
     }
 }

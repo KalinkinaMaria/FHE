@@ -31,6 +31,12 @@ namespace FHE.Controls
             set;
         }
 
+        public bool IsNeedMF
+        {
+            get;
+            set;
+        }
+
         public string LinkFunc
         {
             get;
@@ -106,6 +112,7 @@ namespace FHE.Controls
             InitializeComponent();
             LinkFunc = "";
             IsNeedFuncLink = false;
+            IsNeedMF = false;
             childrenNode = new List<HierarchyNode>();
             ParentNode = new List<AbstractHierarchyNode>();
         }
@@ -137,6 +144,20 @@ namespace FHE.Controls
             onChange();
         }
 
+        public int CountEdgesWithChild()
+        {
+            int result = 0;
+
+            result += this.childrenNode.Count;
+
+            foreach (HierarchyNode Child in this.childrenNode)
+            {
+                result += Child.CountEdgesWithChild();
+            }
+
+            return result;
+        }
+
         private void Grid_MouseEnter(object sender, MouseEventArgs e)
         {
             if (MainWindow.mode == MainWindow.Mode.EDIT_HIERARCHY)
@@ -149,7 +170,7 @@ namespace FHE.Controls
             {
                 this.addFuncLink.Visibility = System.Windows.Visibility.Visible;
             }
-            else if (MainWindow.mode == MainWindow.Mode.EDIT_FUNK_MEMBERSHIP)
+            else if (MainWindow.mode == MainWindow.Mode.EDIT_FUNK_MEMBERSHIP && this.IsNeedMF)
             {
                 this.addMembershipFunc.Visibility = System.Windows.Visibility.Visible;
             }

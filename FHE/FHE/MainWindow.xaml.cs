@@ -1,4 +1,5 @@
 ﻿using FHE.Controls;
+using FHE.Windows;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -164,16 +165,37 @@ namespace FHE
                     this.nameMode.Text = "Определение желательности достижения цели и возможности реализации характеристик";
                     this.forward.Content = "Рассчитать";
                     //TO DO Закрасить вершины, для которых неодходимо добавить функции принадлежности
+                    print_node_for_MF();
                     break;
                 case Mode.EDIT_FUNK_MEMBERSHIP:
                     mode = Mode.CALC_RESULT;
                     this.forward.IsEnabled = false;
                     this.nameMode.Text = "Рассчитать оптимальное достижение цели";
                     //TO DO открыть окно с рассчетом
+                    ResultingWindow Window = new ResultingWindow((this.stackLevel.Children[0] as HierarchyLevelForGoal).GetGoals());
+                    Window.ShowDialog();
                     break;
                 case Mode.CALC_RESULT:
                     break;
             }
+        }
+
+        private void print_node_for_MF()
+        {
+            HierarchyLevel FirstLevel = (this.stackLevel.Children[0] as HierarchyLevel);
+            for (int i = 0; i < FirstLevel.stackNode.Children.Count; i++)
+            {
+                (FirstLevel.stackNode.Children[i] as AbstractHierarchyNode).formNode.Fill = Brushes.Orange;
+                (FirstLevel.stackNode.Children[i] as AbstractHierarchyNode).IsNeedMF = true;
+            }
+
+            HierarchyLevel LastLevel = (this.stackLevel.Children[this.stackLevel.Children.Count - 2] as HierarchyLevel);
+            for (int i = 0; i < LastLevel.stackNode.Children.Count; i++)
+            {
+                (LastLevel.stackNode.Children[i] as AbstractHierarchyNode).formNode.Fill = Brushes.Orange;
+                (LastLevel.stackNode.Children[i] as AbstractHierarchyNode).IsNeedMF = true;
+            }
+            
         }
 
         private void Mode_Down(object sender, RoutedEventArgs e)

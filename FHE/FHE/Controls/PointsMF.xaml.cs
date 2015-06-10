@@ -50,6 +50,7 @@ namespace FHE.Controls
             {
                 this.Parent.CurrentNode.MembershipFunction.Add(point);
             }
+            this.Parent.Close();
         }
     }
 }
