@@ -82,6 +82,8 @@ namespace FHE.Controls
 
         abstract protected void add();
 
+        abstract public void add(String Name);
+
         private void Grid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (MainWindow.mode == MainWindow.Mode.EDIT_HIERARCHY)

@@ -28,6 +28,21 @@ namespace FHE.Controls
             addingNode.onChange += this.fairOnChange;
         }
 
+        public override void add(String Name)
+        {
+            HierarchyGoal addingNode = new HierarchyGoal();
+            addingNode.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+            addingNode.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+            addingNode.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+            addingNode.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+            addingNode.textNode.Text = Name;
+            Grid.SetColumn(addingNode, this.stackNode.ColumnDefinitions.Count);
+            this.stackNode.ColumnDefinitions.Add(new ColumnDefinition());
+            this.stackNode.Children.Add(addingNode);
+
+            addingNode.onChange += this.fairOnChange;
+        }
+
         public List<HierarchyGoal> GetGoals()
         {
             List<HierarchyGoal> Results = new List<HierarchyGoal>();
