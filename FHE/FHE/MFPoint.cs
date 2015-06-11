@@ -22,14 +22,21 @@ namespace FHE
             private set;
         }
 
+        public MFPoint()
+        {
+            lambda = new Dictionary<string, double>();
+        }
+
         public MFPoint(double x, double y)
         {
+            lambda = new Dictionary<string, double>();
             this.x = x;
             this.y = y;
         }
 
         public MFPoint(double x, double y, Dictionary<String, double> lambda)
         {
+            lambda = new Dictionary<string, double>();
             this.x = x;
             this.y = y;
             this.lambda = lambda;

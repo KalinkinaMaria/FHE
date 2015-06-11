@@ -8,19 +8,32 @@ namespace FHE
     class MembershipFunction
     {
         private const double inaccuracy = 0.05d;
+        public String Unit;
+        public int StartX;
+        public int EndX;
 
-        private List<MFPoint> points = new List<MFPoint>();
+        public List<MFPoint> points = new List<MFPoint>();
 
         public MembershipFunction()
         {
         }
 
-        public MembershipFunction(List<Point> Points)
+        public MembershipFunction(String Unit, int StartX, int EndX)
+        {
+            this.Unit = Unit;
+            this.StartX = StartX;
+            this.EndX = EndX;
+        }
+
+        public MembershipFunction(List<Point> Points, String Unit, int StartX, int EndX)
         {
             foreach (Point point in Points)
             {
                 points.Add(new MFPoint(point.X, point.Y));
             }
+            this.Unit = Unit;
+            this.StartX = StartX;
+            this.EndX = EndX;
         }
 
         public int countPoints()
@@ -31,7 +44,7 @@ namespace FHE
         public void addMFPoint(MFPoint point)
         {
             points.Add(point);
-            this.sortPoint(0, points.Count);
+            this.sortPoint(0, points.Count-1);
             this.deleteRepeat();
         }
 
