@@ -30,6 +30,12 @@ namespace FHE.Windows
             this.Goals = Goals;
             ResultingWindow.CalculatePB = this.ProgressCalculation;
 
+            //Вывод желательности достижения цели
+            this.AxisX.Minimum = this.Goals[0].StartXMF;
+            this.AxisX.Maximum = this.Goals[0].EndXMF;
+            this.AxisX.Title = this.Goals[0].UnitMF;
+            this.MF.ItemsSource = this.Goals[0].MembershipFunction;
+
             //Расчет коэффициента прирощения progress bar
             ResultingWindow.FactorIncProgressBar = 0;
             foreach (HierarchyGoal goal in this.Goals)
@@ -46,6 +52,8 @@ namespace FHE.Windows
             CalculateProcess.StartCalculation();
 
             //Вывод результата
+            List<Point> result =  CalculateProcess.GetResultMembershipFunction(0);
+            this.SMF.ItemsSource = result;
         }
 
         public static void IncProgressBar()
