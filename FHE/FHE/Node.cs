@@ -6,12 +6,24 @@ namespace FHE
 {
     abstract class Node
     {
-        protected Function communicationFunction = new Function();
-        protected List<Node> children = new List<Node>();
+        public Function communicationFunction
+        {
+            get;
+            protected set;
+        }
+        public List<Node> children = new List<Node>();
+        public String FullName;
+        public int Level;
+
         public String name
         {
             get;
             protected set;
+        }
+
+        public Node()
+        {
+            communicationFunction = new Function();
         }
 
         public virtual void calcMembershipFunc()
@@ -26,14 +38,14 @@ namespace FHE
 
         protected List<List<MFPoint>> merge(List<List<MFPoint>> first, MembershipFunction second)
         {
-            List<List<MFPoint>> result = null;
+            List<List<MFPoint>> result = new List<List<MFPoint>>();
             if (first.Count != 0)
             {
                 for (int i = 0; i < second.countPoints(); i++)
                 {
                     for (int j = 0; j < first.Count; j++)
                     {
-                        List<MFPoint> tmp = null;
+                        List<MFPoint> tmp = new List<MFPoint>();
                         for (int l = 0; l < first[j].Count; l++)
                         {
                             tmp.Add(first[j][l]);
@@ -47,7 +59,7 @@ namespace FHE
             {
                 for (int i = 0; i < second.countPoints(); i++)
                 {
-                    List<MFPoint> tmp = null;
+                    List<MFPoint> tmp = new List<MFPoint>();
                     tmp.Add(second.getMFPoint(i));
                     result.Add(tmp);
                 }
@@ -57,8 +69,8 @@ namespace FHE
 
         protected MFPoint calcMFPoint(List<MFPoint> points)
         {
-            Dictionary<String, double> vars = null;
-            Dictionary<String, double> lambda = null;
+            Dictionary<String, double> vars = new Dictionary<string,double>();
+            Dictionary<String, double> lambda = new Dictionary<string,double>();
             double x;
             double y = points[0].y;
 

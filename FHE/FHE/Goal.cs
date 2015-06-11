@@ -7,16 +7,18 @@ namespace FHE
 {
     class Goal : Node
     {
-        private MembershipFunction desirabilityGoal;
-        private MembershipFunction achievementGoal;
+        public MembershipFunction desirabilityGoal;
+        public MembershipFunction achievementGoal;
         private MFPoint resultGoal;
 
-        public Goal(MembershipFunction DesirabilityGoal, String Name, Function CommunicationFunction)
+        public Goal(MembershipFunction DesirabilityGoal, String Name, Function CommunicationFunction, String FullName)
             : base()
         {
             this.desirabilityGoal = DesirabilityGoal;
             this.name = Name;
             this.communicationFunction = CommunicationFunction;
+            this.FullName = FullName;
+            this.Level = 1;
         }
 
         private void culcResultGoal()
@@ -57,7 +59,7 @@ namespace FHE
 
         public override void calcMembershipFunc()
         {
-            List<List<MFPoint>> merged = null;
+            List<List<MFPoint>> merged = new List<List<MFPoint>>();
             MembershipFunction result = new MembershipFunction();
 
             //Высчитать функции принадлежности для детей

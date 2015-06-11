@@ -10,20 +10,22 @@ namespace FHE
         public MembershipFunction achievementCharacteristics
         {
             get;
-            private set;
+            set;
         }
 
-        public Characteristic(MembershipFunction AchievementCharacteristics, String Name, Function CommunicationFunction)
+        public Characteristic(MembershipFunction AchievementCharacteristics, String Name, Function CommunicationFunction, String FullName, int Level)
             : base()
         {
             this.achievementCharacteristics = AchievementCharacteristics;
             this.name = Name;
             this.communicationFunction = CommunicationFunction;
+            this.FullName = FullName;
+            this.Level = Level;
         }
 
         public override void calcMembershipFunc()
         {
-            List<List<MFPoint>> merged = null;
+            List<List<MFPoint>> merged = new List<List<MFPoint>>();
             MembershipFunction result = new MembershipFunction();
 
             if(achievementCharacteristics.countPoints() == 0)
