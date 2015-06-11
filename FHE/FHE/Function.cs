@@ -8,7 +8,11 @@ namespace FHE
 {
     public class Function
     {
-        private String representationFunc;
+        public String representationFunc
+        {
+            get;
+            private set;
+        }
 
         public Function(String representationFunc)
         {
@@ -23,17 +27,18 @@ namespace FHE
         public double calcResult(Dictionary<String, double> args)
         {
             double result = 0;
+            String resultFunction = representationFunc;
 
             Dictionary<String, double>.KeyCollection keys = args.Keys;
 
             foreach (string key in keys)
             {
-                representationFunc = representationFunc.Replace(key, args[key].ToString());
+                resultFunction = resultFunction.Replace(key, args[key].ToString());
             }
-            representationFunc = representationFunc.Replace(",", ".");
+            resultFunction = resultFunction.Replace(",", ".");
 
             Parser parser = new Parser();
-            object r = parser.Parse(representationFunc).Calculate();
+            object r = parser.Parse(resultFunction).Calculate();
             String str = r.ToString();
             str = str.Replace(",", ".");
             result = Convert.ToSingle(str, new CultureInfo("en-US"));

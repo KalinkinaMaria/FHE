@@ -24,6 +24,9 @@ namespace FHE.Controls
         public event ChangeEventHandler onChange;
 
         public List<Point> MembershipFunction = new List<Point>();
+        public String UnitMF;
+        public int StartXMF;
+        public int EndXMF;
 
         public bool IsNeedFuncLink
         {
@@ -40,7 +43,7 @@ namespace FHE.Controls
         public string LinkFunc
         {
             get;
-            private set;
+            set;
         }
 
         public Point Position
@@ -50,7 +53,7 @@ namespace FHE.Controls
                 int level = (((this.Parent as Grid).Parent as Grid).Parent as HierarchyLevel).Number;
                 int column = Grid.GetColumn(this);
                 int columns = (this.Parent as Grid).Children.Count;
-                double width = (this.Parent as Grid).ActualWidth;
+                double width = 605;
                 double x = width / (columns * 2) * ((column + 1) * 2 - 1);
                 double y = 50*level-25;
                 return new Point(x, y);
@@ -60,7 +63,7 @@ namespace FHE.Controls
         public string name
         {
             get;
-            private set;
+            set;
         }
 
         public List<HierarchyNode> childrenNode

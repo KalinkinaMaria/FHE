@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
 using xFunc.Maths;
 
 namespace FHE
@@ -37,7 +38,6 @@ namespace FHE
             HierarchyLevelForGoal addingCanvas = new HierarchyLevelForGoal(this.stackLevel.Children.Count);
             addingCanvas.onChange += this.repaintEdge;
             this.stackLevel.Children.Insert(0, addingCanvas);
-            //StackPanel stackLevel = (this.targetLevel.Parent as StackPanel);
         }
 
         public void repaintEdge()
@@ -235,6 +235,50 @@ namespace FHE
             {
                 (this.stackLevel.Children[i] as HierarchyLevel).paint_node_for_start();
             }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            String filename;
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.FileName = "Document"; 
+            dlg.DefaultExt = ".xml";
+            dlg.Filter = "Файл описания системы (.xml)|*.xml"; 
+
+            Nullable<bool> result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                filename = dlg.FileName;
+            }
+            else
+            {
+                return;
+            }
+
+            List<Goal> Nodes = ParserXML.ParseXMLFile(filename);
+
+            //Перевод в графическое представление
+            this.stackLevel.Children.RemoveAt(0);
+            ConvertModel.FromModelToView(Nodes, this.stackLevel);
+
+            for (int i = 0; i < this.stackLevel.Children.Count - 1; i ++)
+            {
+                (this.stackLevel.Children[i] as HierarchyLevel).onChange += this.repaintEdge;
+            }
+
+            //Замена 
+            repaintEdge();
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
