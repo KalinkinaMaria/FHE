@@ -29,7 +29,7 @@ namespace FHE
         {
             foreach (Point point in Points)
             {
-                points.Add(new MFPoint(point.X, point.Y));
+                points.Add(new MFPoint(point.X, point.Y, Unit));
             }
             this.Unit = Unit;
             this.StartX = StartX;

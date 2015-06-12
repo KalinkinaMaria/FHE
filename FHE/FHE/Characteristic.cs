@@ -46,7 +46,7 @@ namespace FHE
                 //вычисление функции принадлежности узла
                 for (int i = 0; i < merged.Count; i++)
                 {
-                    MFPoint NewPoint = this.calcMFPoint(merged[i]);
+                    MFPoint NewPoint = this.calcMFPoint(merged[i], "");
                     result.addMFPoint(NewPoint);
                 }
 

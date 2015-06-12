@@ -9,7 +9,7 @@ namespace FHE
     {
         public MembershipFunction desirabilityGoal;
         public MembershipFunction achievementGoal;
-        private MFPoint resultGoal;
+        public MFPoint resultGoal;
 
         public Goal(MembershipFunction DesirabilityGoal, String Name, Function CommunicationFunction, String FullName)
             : base()
@@ -23,8 +23,6 @@ namespace FHE
 
         private void culcResultGoal()
         {
-            //this.calcMembershipFunc();
-
             //Найти пересечение
             for (int i = 0; i < desirabilityGoal.countPoints() - 1; i++)
             {
@@ -78,7 +76,7 @@ namespace FHE
             //вычисление функции принадлежности узла
             for (int i = 0; i < merged.Count; i++)
             {
-                result.addMFPoint(this.calcMFPoint(merged[i]));
+                result.addMFPoint(this.calcMFPoint(merged[i], desirabilityGoal.Unit));
             }
 
             achievementGoal = result;

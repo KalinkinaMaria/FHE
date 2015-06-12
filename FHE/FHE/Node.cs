@@ -67,10 +67,10 @@ namespace FHE
             return result;
         }
 
-        protected MFPoint calcMFPoint(List<MFPoint> points)
+        protected MFPoint calcMFPoint(List<MFPoint> points, String Unit)
         {
             Dictionary<String, double> vars = new Dictionary<string,double>();
-            Dictionary<String, double> lambda = new Dictionary<string,double>();
+            Dictionary<String, MFPoint> lambda = new Dictionary<string, MFPoint>();
             double x;
             double y = points[0].y;
 
@@ -83,19 +83,26 @@ namespace FHE
                 }
                 if (points[i].lambda.Count != 0)
                 {
-                    Dictionary<String, double>.KeyCollection keys = points[i].lambda.Keys;
+                    Dictionary<String, MFPoint>.KeyCollection keys = points[i].lambda.Keys;
                     foreach (string key in keys)
                     {
-                        lambda.Add(key, points[i].lambda[key]);
+                        if (lambda.ContainsKey(key))
+                        {
+                            lambda[key] = points[i].lambda[key];
+                        }
+                        else
+                        {
+                            lambda.Add(key, points[i].lambda[key]);
+                        }                        
                     }
                 }
                 else
                 {
-                    lambda.Add(this.children[i].name, points[i].x);
+                    lambda.Add(this.children[i].name + " (" + this.children[i].FullName + ")", points[i]);
                 }
             }
             x = this.communicationFunction.calcResult(vars);
-            return new MFPoint(x, y, lambda);
+            return new MFPoint(x, y, lambda, Unit);
         }
     }
 }

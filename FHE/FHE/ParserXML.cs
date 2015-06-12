@@ -182,7 +182,7 @@ namespace FHE
                                 break;
                         }
                     }
-                    MF.addMFPoint(new MFPoint(x, y));
+                    MF.addMFPoint(new MFPoint(x, y, CurrentUnit));
                     break;
                 case "TRANSITION":
                     String parent = null;
