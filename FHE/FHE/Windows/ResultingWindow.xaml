@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:System.Windows.Controls"
         xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
-        Title="ResultingWindow" Height="300" Width="300">
+        Title="ResultingWindow" Height="400" Width="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -27,8 +27,8 @@
             </chartingToolkit:Chart.Axes>
         </chartingToolkit:Chart>
         <ProgressBar x:Name="ProgressCalculation" Minimum="0" Maximum="100" Value="0" Grid.Row="2" Height="25"/>
-        <TextBlock Text="{Binding ElementName=ProgressCalculation, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2"/>
-        <TextBlock x:Name="DefinitionResults" Grid.Row="2" Visibility="Hidden"/>
+        <TextBlock x:Name="ProgressText" Text="{Binding ElementName=ProgressCalculation, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2"/>
+        <StackPanel x:Name="StackDefinitionResults" Grid.Row="2" Visibility="Hidden" Orientation="Vertical"/>
         <Button x:Name="SaveResults" Content="Сохранить результат" Grid.Row="3" Width="150" HorizontalAlignment="Left" Visibility="Hidden"/>
         <Button x:Name="StartCalculate" Content="Старт" Grid.Row="3" Width="100" HorizontalAlignment="Left" Click="StartCalculate_Click"/>
     </Grid>

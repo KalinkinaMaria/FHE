@@ -54,6 +54,51 @@ namespace FHE.Windows
             //Вывод результата
             List<Point> result =  CalculateProcess.GetResultMembershipFunction(0);
             this.SMF.ItemsSource = result;
+
+            //Поиск пересечения
+            this.SaveResults.Visibility = System.Windows.Visibility.Visible;
+            this.StackDefinitionResults.Visibility = System.Windows.Visibility.Visible;
+            this.ProgressCalculation.Visibility = System.Windows.Visibility.Hidden;
+            this.StartCalculate.Visibility = System.Windows.Visibility.Hidden;
+            this.ProgressText.Visibility = System.Windows.Visibility.Hidden;
+            List<MFPoint> results = CalculateProcess.GetResults();
+            PrintResult(results[0], Goals[0]);
+        }
+
+        private void PrintResult(MFPoint ResultPoint, HierarchyGoal ResultGoal)
+        {
+            TextBlock strResult = new TextBlock();
+            strResult.Text = "Оптимальное решение для цели ";
+            strResult.TextWrapping = TextWrapping.WrapWithOverflow;
+            this.StackDefinitionResults.Children.Add(strResult);
+
+            TextBlock goalResult = new TextBlock();
+            goalResult.TextWrapping = TextWrapping.WrapWithOverflow;
+            goalResult.Text = ResultGoal.textNode.Text;
+            goalResult.Text += " (";
+            goalResult.Text += ResultGoal.name;
+            goalResult.Text += ") = ";
+            goalResult.Text += Convert.ToString(ResultPoint.x);
+            goalResult.Text += " ";
+            goalResult.Text += ResultPoint.Unit;
+            this.StackDefinitionResults.Children.Add(goalResult);
+
+            TextBlock strResult2 = new TextBlock();
+            strResult2.Text = "Цель достигается при следующих значениях характеристик: ";
+            strResult2.TextWrapping = TextWrapping.WrapWithOverflow;
+            this.StackDefinitionResults.Children.Add(strResult2);
+
+            foreach (String nameX in ResultPoint.lambda.Keys)
+            {
+                TextBlock characteristic = new TextBlock();
+                characteristic.Text = nameX;
+                characteristic.Text += " = ";
+                characteristic.Text += Convert.ToString(ResultPoint.lambda[nameX].x);
+                characteristic.Text += " ";
+                characteristic.Text += ResultPoint.lambda[nameX].Unit;
+                characteristic.TextWrapping = TextWrapping.WrapWithOverflow;
+                this.StackDefinitionResults.Children.Add(characteristic);
+            }
         }
 
         public static void IncProgressBar()

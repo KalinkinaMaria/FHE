@@ -15,17 +15,28 @@ namespace FHE
         public Process(List<HierarchyGoal> Goals)
         {
             this.GoalsView = Goals;
+            GoalsModel = ConvertModel.FromViewToModel(GoalsView);
         }
 
         public void StartCalculation()
         {
-            GoalsModel = ConvertModel.FromViewToModel(GoalsView);
-
             foreach (Goal goal in GoalsModel)
             {
                 goal.calcMembershipFunc();
             }
 
+        }
+
+        public List<MFPoint> GetResults()
+        {
+            List<MFPoint> results = new List<MFPoint>();
+
+            foreach (Goal goal in GoalsModel)
+            {
+                results.Add(goal.resultGoal);
+            }            
+
+            return results;
         }
 
         public List<Point> GetResultMembershipFunction(int index)
