@@ -61,10 +61,14 @@ namespace FHE
         {
             foreach (Characteristic ModelChild in ModelGoal.children)
             {
-                HierarchyNode ChildNode = NodeFromModelToView(ModelChild, StackLevel);
-                NewViewNode.childrenNode.Add(ChildNode);
-                ChildNode.ParentNode.Add(NewViewNode);
-                ChildrenFromModelToView(ChildNode, ModelChild, StackLevel);
+                int Index = Convert.ToInt32(ModelChild.name.Replace("x", "").Replace("X", ""));
+                if (!NewViewNode.containsChild(Index))
+                {
+                    HierarchyNode ChildNode = NodeFromModelToView(ModelChild, StackLevel);
+                    NewViewNode.childrenNode.Add(ChildNode);
+                    ChildNode.ParentNode.Add(NewViewNode);
+                    ChildrenFromModelToView(ChildNode, ModelChild, StackLevel);
+                }
             }
         }
 

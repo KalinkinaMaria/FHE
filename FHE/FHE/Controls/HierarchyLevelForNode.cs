@@ -47,7 +47,9 @@ namespace FHE.Controls
 
         public override void add(String Name)
         {
-            HierarchyNode addingNode = new HierarchyNode();
+            String Index = Name.Replace("x", "");
+            Index = Index.Replace("X", "");
+            HierarchyNode addingNode = new HierarchyNode(Convert.ToInt32(Index));
             addingNode.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
             addingNode.VerticalAlignment = System.Windows.VerticalAlignment.Center;
             addingNode.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
