@@ -26,7 +26,7 @@ namespace FHE
         public override void calcMembershipFunc()
         {
             List<List<MFPoint>> merged = new List<List<MFPoint>>();
-            MembershipFunction result = new MembershipFunction();
+            MembershipFunction result = new MembershipFunction(achievementCharacteristics.Unit, achievementCharacteristics.StartX, achievementCharacteristics.EndX);
 
             if(achievementCharacteristics.countPoints() == 0)
 	        {
@@ -46,7 +46,8 @@ namespace FHE
                 //вычисление функции принадлежности узла
                 for (int i = 0; i < merged.Count; i++)
                 {
-                    result.addMFPoint(this.calcMFPoint(merged[i]));
+                    MFPoint NewPoint = this.calcMFPoint(merged[i]);
+                    result.addMFPoint(NewPoint);
                 }
 
                 achievementCharacteristics = result;
