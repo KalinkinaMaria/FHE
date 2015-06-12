@@ -146,7 +146,7 @@ namespace FHE
 
         private static Goal GoalFromViewToModel(HierarchyGoal ViewGoal)
         {
-            Goal NewGoal = new Goal(new MembershipFunction(ViewGoal.MembershipFunction, ViewGoal.UnitMF, ViewGoal.StartXMF, ViewGoal.EndXMF), ViewGoal.textNode.Text, new Function(ViewGoal.LinkFunc), ViewGoal.Name);
+            Goal NewGoal = new Goal(new MembershipFunction(ViewGoal.MembershipFunction, ViewGoal.UnitMF, ViewGoal.StartXMF, ViewGoal.EndXMF), ViewGoal.textNode.Text, new Function(ViewGoal.LinkFunc), ViewGoal.name);
 
             ChildrenFromViewToModel(NewGoal, ViewGoal, 2);
 
@@ -155,7 +155,7 @@ namespace FHE
 
         private static Characteristic CharacteristicFromViewToModel(HierarchyNode ViewNode, int Level)
         {
-            Characteristic NewCharacteristic = new Characteristic(new MembershipFunction(ViewNode.MembershipFunction, ViewNode.UnitMF, ViewNode.StartXMF, ViewNode.EndXMF), ViewNode.textNode.Text, new Function(ViewNode.LinkFunc), ViewNode.Name, Level);
+            Characteristic NewCharacteristic = new Characteristic(new MembershipFunction(ViewNode.MembershipFunction, ViewNode.UnitMF, ViewNode.StartXMF, ViewNode.EndXMF), ViewNode.textNode.Text, new Function(ViewNode.LinkFunc), ViewNode.name, Level);
 
             return NewCharacteristic;
         }
