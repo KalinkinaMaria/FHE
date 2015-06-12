@@ -9,8 +9,8 @@ namespace FHE
     {
         private const double inaccuracy = 0.05d;
         public String Unit;
-        public int StartX;
-        public int EndX;
+        public double StartX;
+        public double EndX;
 
         public List<MFPoint> points = new List<MFPoint>();
 
@@ -18,14 +18,14 @@ namespace FHE
         {
         }
 
-        public MembershipFunction(String Unit, int StartX, int EndX)
+        public MembershipFunction(String Unit, double StartX, double EndX)
         {
             this.Unit = Unit;
             this.StartX = StartX;
             this.EndX = EndX;
         }
 
-        public MembershipFunction(List<Point> Points, String Unit, int StartX, int EndX)
+        public MembershipFunction(List<Point> Points, String Unit, double StartX, double EndX)
         {
             foreach (Point point in Points)
             {
@@ -85,12 +85,12 @@ namespace FHE
             //удаление точек, равных с погрешностью 0,05
             for (int i = 0; i < points.Count - 1; i++)
             {
-                if (points[i].x < 0 || points[i].x > 1)
+                /*if (points[i].x < StartX || points[i].x > EndX)
                 {
                     points.RemoveAt(i);
                     i--;
                 }
-                else if (Math.Abs(points[i].x - points[i + 1].x) < inaccuracy)
+                else */if (Math.Abs(points[i].x - points[i + 1].x) < inaccuracy)
                 {
                     if (points[i].y > points[i + 1].y)
                     {

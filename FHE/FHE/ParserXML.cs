@@ -15,8 +15,8 @@ namespace FHE
         private static Dictionary<String, Characteristic> Characteristics = new Dictionary<string,Characteristic>();
         private static String CurrentLinkFunction;
         private static MembershipFunction MF;
-        private static int CurrentStartX;
-        private static int CurrentEndX;
+        private static double CurrentStartX;
+        private static double CurrentEndX;
         private static String CurrentUnit;
 
         public static List<Goal> ParseXMLFile(String PathFile)
@@ -155,10 +155,10 @@ namespace FHE
                                 CurrentUnit = AttributeXml.Value;
                                 break;
                             case "startX":
-                                CurrentStartX = Convert.ToInt32(AttributeXml.Value);
+                                CurrentStartX = Convert.ToDouble(AttributeXml.Value.Replace('.', ','));
                                 break;
                             case "endX":
-                                CurrentEndX = Convert.ToInt32(AttributeXml.Value);
+                                CurrentEndX = Convert.ToDouble(AttributeXml.Value.Replace('.', ','));
                                 break;
                         }
                     }

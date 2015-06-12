@@ -25,8 +25,8 @@ namespace FHE.Controls
 
         public List<Point> MembershipFunction = new List<Point>();
         public String UnitMF;
-        public int StartXMF;
-        public int EndXMF;
+        public double StartXMF;
+        public double EndXMF;
 
         public bool IsNeedFuncLink
         {
