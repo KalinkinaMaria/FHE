@@ -35,5 +35,6 @@
         </Button>
         <StackPanel Orientation="Vertical" x:Name="StackPointMF" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5"/>
         <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="25" Content="Сохранить" Click="Button_Click"/>
+        <Button Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="2" Height="25" Content="Отмена" Click="Button_Click_1"/>
     </Grid>
 </UserControl>

@@ -29,8 +29,17 @@ namespace FHE.Controls
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.Parent.PointsMF.Add(new Point(Convert.ToDouble(this.IdealX1.Text), 1));
-            this.Parent.PointsMF.Add(new Point(Convert.ToDouble(this.IdealX2.Text), 1));
+            try
+            {
+                this.Parent.PointsMF.Add(new Point(Convert.ToDouble(this.IdealX1.Text), 1));
+                this.Parent.PointsMF.Add(new Point(Convert.ToDouble(this.IdealX2.Text), 1));
+            }
+            catch (FormatException exept)
+            {
+                System.Windows.MessageBox.Show(Parent, "Вершина " + Parent.CurrentNode.textNode.Text + ". Значение X - ожидалось число",
+            "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
             this.Parent.MF.ItemsSource = this.Parent.PointsMF;
             this.IsEnabled = false;
@@ -41,7 +50,8 @@ namespace FHE.Controls
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-
+            this.IsEnabled = false;
+            this.Parent.StackStep.Children[0].IsEnabled = true;
         }
     }
 }

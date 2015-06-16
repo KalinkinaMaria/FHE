@@ -64,8 +64,15 @@ namespace FHE.Controls
             }
             this.IsEnabled = false;
 
-            IdealValueMF Ideal = new IdealValueMF(this.Parent);
-            this.Parent.StackStep.Children.Insert(this.Parent.StackStep.Children.Count, Ideal);
+            if (this.Parent.StackStep.Children.Count > 1)
+            {
+                this.Parent.StackStep.Children[1].IsEnabled = true;
+            }
+            else
+            {
+                IdealValueMF Ideal = new IdealValueMF(this.Parent);
+                this.Parent.StackStep.Children.Insert(this.Parent.StackStep.Children.Count, Ideal);
+            }           
         }
     }
 }
