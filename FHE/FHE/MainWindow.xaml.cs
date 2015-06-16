@@ -322,6 +322,13 @@ namespace FHE
 
             List<Goal> Nodes = ParserXML.ParseXMLFile(filename);
 
+            if (Nodes == null)
+            {
+                System.Windows.MessageBox.Show(this, "Некорректный входной файл.",
+            "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             //Перевод в графическое представление
             this.stackLevel.Children.RemoveAt(0);
             ConvertModel.FromModelToView(Nodes, this.stackLevel);
@@ -333,11 +340,21 @@ namespace FHE
 
             //Замена 
             repaintEdge();
+
+            this.Title = this.Title.Remove(0, this.Title.LastIndexOf("-")).Insert(0, filename);
         }
 
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
+            String filename = this.Title.Remove(this.Title.LastIndexOf("-"));
 
+            List<HierarchyLevel> levels = new List<HierarchyLevel>();
+            for (int i = 0; i < this.stackLevel.Children.Count - 1; i++)
+            {
+                levels.Add(this.stackLevel.Children[i] as HierarchyLevel);
+            }
+
+            ParserXML.SaveToFile(filename, levels);
         }
 
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
@@ -370,7 +387,9 @@ namespace FHE
 
         private void MenuItem_Click_3(object sender, RoutedEventArgs e)
         {
+            Clear();
 
+            this.Title = "Новый документ - FHE";
         }
     }
 }
