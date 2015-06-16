@@ -15,32 +15,38 @@ namespace FHE.Controls
 
         protected override void add()
         {
-            HierarchyGoal addingNode = new HierarchyGoal();
-            addingNode.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-            addingNode.VerticalAlignment = System.Windows.VerticalAlignment.Center;
-            addingNode.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
-            addingNode.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
-            addingNode.textNode.Text = "Q" + (this.stackNode.ColumnDefinitions.Count + 1);
-            Grid.SetColumn(addingNode, this.stackNode.ColumnDefinitions.Count);
-            this.stackNode.ColumnDefinitions.Add(new ColumnDefinition());
-            this.stackNode.Children.Add(addingNode);
+            if (this.stackNode.Children.Count == 0)
+            {
+                HierarchyGoal addingNode = new HierarchyGoal();
+                addingNode.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                addingNode.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                addingNode.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+                addingNode.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+                addingNode.textNode.Text = "Q" + (this.stackNode.ColumnDefinitions.Count + 1);
+                Grid.SetColumn(addingNode, this.stackNode.ColumnDefinitions.Count);
+                this.stackNode.ColumnDefinitions.Add(new ColumnDefinition());
+                this.stackNode.Children.Add(addingNode);
 
-            addingNode.onChange += this.fairOnChange;
+                addingNode.onChange += this.fairOnChange;
+            }
         }
 
         public override void add(String Name)
         {
-            HierarchyGoal addingNode = new HierarchyGoal();
-            addingNode.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-            addingNode.VerticalAlignment = System.Windows.VerticalAlignment.Center;
-            addingNode.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
-            addingNode.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
-            addingNode.textNode.Text = Name;
-            Grid.SetColumn(addingNode, this.stackNode.ColumnDefinitions.Count);
-            this.stackNode.ColumnDefinitions.Add(new ColumnDefinition());
-            this.stackNode.Children.Add(addingNode);
+            if (this.stackNode.Children.Count == 0)
+            {
+                HierarchyGoal addingNode = new HierarchyGoal();
+                addingNode.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                addingNode.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                addingNode.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+                addingNode.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+                addingNode.textNode.Text = Name;
+                Grid.SetColumn(addingNode, this.stackNode.ColumnDefinitions.Count);
+                this.stackNode.ColumnDefinitions.Add(new ColumnDefinition());
+                this.stackNode.Children.Add(addingNode);
 
-            addingNode.onChange += this.fairOnChange;
+                addingNode.onChange += this.fairOnChange;
+            }
         }
 
         public List<HierarchyGoal> GetGoals()
