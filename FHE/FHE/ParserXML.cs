@@ -22,6 +22,115 @@ namespace FHE
         private static double CurrentEndX;
         private static String CurrentUnit;
 
+        public static void SaveMFToFile(String filename, List<Point> points, String unit, double startX, double endX)
+        {
+            XmlTextWriter textWritter = new XmlTextWriter(filename, null);
+            textWritter.WriteStartElement("ROOT");
+            textWritter.WriteEndElement();
+            textWritter.Close();
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(filename);
+
+            XmlAttribute currentAttr;
+            XmlElement mf = xmlDoc.CreateElement("MF");
+            currentAttr = xmlDoc.CreateAttribute("unit");
+            currentAttr.Value = unit;
+            mf.Attributes.Append(currentAttr);
+            currentAttr = xmlDoc.CreateAttribute("startX");
+            currentAttr.Value = Convert.ToString(startX);
+            mf.Attributes.Append(currentAttr);
+            currentAttr = xmlDoc.CreateAttribute("endX");
+            currentAttr.Value = Convert.ToString(endX);
+            mf.Attributes.Append(currentAttr);
+
+            foreach (Point point in points)
+            {
+                XmlElement elementPoint = xmlDoc.CreateElement("POINT");
+                currentAttr = xmlDoc.CreateAttribute("x");
+                currentAttr.Value = Convert.ToString(point.X);
+                elementPoint.Attributes.Append(currentAttr);
+                currentAttr = xmlDoc.CreateAttribute("y");
+                currentAttr.Value = Convert.ToString(point.Y);
+                elementPoint.Attributes.Append(currentAttr);
+                mf.AppendChild(elementPoint);
+            }
+            xmlDoc.DocumentElement.AppendChild(mf); 
+        }
+
+        public static MembershipFunction ParseXMLFileToMF(String filename)
+        {
+            MembershipFunction mf = new MembershipFunction();
+
+            XmlDocument XmlDoc = new XmlDocument();
+            XmlDoc.Load(filename);
+
+            XmlNode Root = XmlDoc.FirstChild;
+
+            try
+            {
+                ParseXMLNodeToMF(Root);
+            }
+            catch (FormatException exept)
+            {
+                return null;
+            }
+
+            mf = MF;
+            return mf;
+        }
+
+        private static void ParseXMLNodeToMF(XmlNode Root)
+        {
+            switch (Root.Name)
+            {
+                case "ROOT":
+                    foreach (XmlNode ChildXmlNode in Root.ChildNodes)
+                    {
+                        ParseXMLNode(ChildXmlNode);
+                    }
+                    break;
+                case "MF":
+                    foreach (XmlAttribute AttributeXml in Root.Attributes)
+                    {
+                        switch (AttributeXml.Name)
+                        {
+                            case "unit":
+                                CurrentUnit = AttributeXml.Value;
+                                break;
+                            case "startX":
+                                CurrentStartX = Convert.ToDouble(AttributeXml.Value.Replace('.', ','));
+                                break;
+                            case "endX":
+                                CurrentEndX = Convert.ToDouble(AttributeXml.Value.Replace('.', ','));
+                                break;
+                        }
+                    }
+                    MF = new MembershipFunction(CurrentUnit, CurrentStartX, CurrentEndX);
+                    foreach (XmlNode ChildXmlNode in Root.ChildNodes)
+                    {
+                        ParseXMLNode(ChildXmlNode);
+                    }
+                    break;
+                case "POINT":
+                    double x = 0, y = 0;
+                    foreach (XmlAttribute AttributeXml in Root.Attributes)
+                    {
+                        switch (AttributeXml.Name)
+                        {
+                            case "x":
+                                x = Convert.ToDouble(AttributeXml.Value.Replace('.', ','));
+                                break;
+                            case "y":
+                                y = Convert.ToDouble(AttributeXml.Value.Replace('.', ','));
+                                break;
+                        }
+                    }
+                    MF.addMFPoint(new MFPoint(x, y, CurrentUnit));
+                    break;
+            }
+        }
+
         public static void SaveToFile(String filename, List<HierarchyLevel> levels)
         {
             Dictionary<String, List<String>> transition = new Dictionary<string, List<string>>();
@@ -178,7 +287,15 @@ namespace FHE
 
             XmlNode Root = XmlDoc.FirstChild;
 
-            ParseXMLNode(Root);
+            try
+            {
+                ParseXMLNode(Root);
+            }
+            catch (FormatException exept)
+            {
+                return null;
+            }
+            
 
             foreach (Goal goal in Goals.Values)
             {

@@ -13,9 +13,8 @@
             <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Height="25">
                 <Menu>
                     <MenuItem Header="Файл">
-                        <MenuItem Header="Открыть"/>
-                        <MenuItem Header="Сохранить"/>
-                        <MenuItem Header="Сохранить как"/>
+                        <MenuItem Header="Открыть" Click="MenuItem_Click"/>
+                        <MenuItem Header="Сохранить" Click="MenuItem_Click_1"/>
                     </MenuItem>
                 </Menu>
             </DockPanel>

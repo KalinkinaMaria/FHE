@@ -98,5 +98,113 @@ namespace FHE.Windows
                 }
             }
         }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Clear();
+
+            String filename;
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.FileName = "Document";
+            dlg.DefaultExt = ".xml";
+            dlg.Filter = "Файл описания системы (.xml)|*.xml";
+
+            Nullable<bool> result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                filename = dlg.FileName;
+            }
+            else
+            {
+                return;
+            }
+
+            MembershipFunction mf = ParserXML.ParseXMLFileToMF(filename);
+
+            List<Point> points = new List<Point>();
+            foreach (MFPoint mfpoint in mf.points)
+            {
+                points.Add(new Point(mfpoint.x, mfpoint.y));
+            }
+            this.MF.ItemsSource = points;
+
+            DomainMF domain = new DomainMF(this);
+            this.StackStep.Children.Insert(this.StackStep.Children.Count, domain);
+            this.Graphics.Title = CurrentNode.FullName;
+            double start = -1, end = -1;
+            domain.Unit.Text = mf.Unit;
+            domain.MinAxisX.Text = Convert.ToString(mf.StartX);
+            domain.MaxAxisX.Text = Convert.ToString(mf.EndX);
+            domain.IsEnabled = false;
+
+            IdealValueMF Ideal = new IdealValueMF(this);
+            this.StackStep.Children.Insert(this.StackStep.Children.Count, Ideal);
+
+            foreach (Point point in points)
+            {
+                if (point.Y == 1)
+                {
+                    if (start == -1 && end == -1)
+                    {
+                        start = end = point.X;
+                    }
+                    if (point.X < start)
+                    {
+                        start = point.X;
+                    }
+                    if (point.X > end)
+                    {
+                        end = point.X;
+                    }
+                }
+            }
+
+            Ideal.IdealX1.Text = Convert.ToString(start);
+            Ideal.IdealX2.Text = Convert.ToString(end);
+            Ideal.IsEnabled = false;
+
+            PointsMF Points = new PointsMF(this);
+            this.StackStep.Children.Insert(this.StackStep.Children.Count, Points);
+
+            foreach (Point point in points)
+            {
+                if (point.Y != 1)
+                {
+                    DescriptionPoint Point = new DescriptionPoint(Points, this, new Point(point.X, point.Y));
+                    Points.StackPointMF.Children.Add(Point);
+                }
+            }
+        }
+
+        private void Clear()
+        {
+            PointsMF.Clear();
+            this.MF.ItemsSource = PointsMF;
+            this.StackStep.Children.Clear();
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            String filename;
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = "Document";
+            dlg.DefaultExt = ".xml";
+            dlg.Filter = "Файл описания системы (.xml)|*.xml";
+
+            Nullable<bool> result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                filename = dlg.FileName;
+            }
+            else
+            {
+                return;
+            }
+
+            ParserXML.SaveMFToFile(filename, this.PointsMF, (this.StackStep.Children[0] as DomainMF).Unit.Text,
+                Convert.ToDouble((this.StackStep.Children[0] as DomainMF).MinAxisX.Text), Convert.ToDouble((this.StackStep.Children[0] as DomainMF).MaxAxisX.Text));
+        }
     }
 }
