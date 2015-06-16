@@ -77,13 +77,29 @@ namespace FHE.Controls
                         _element.delete();
                         addNode(_element);
 
-                        foreach (AbstractHierarchyNode parentNode in _element.ParentNode)
+                        for (int i = 0; i < _element.ParentNode.Count; i ++ )
                         {
-                            if ((((parentNode.Parent as Grid).Parent as Grid).Parent as HierarchyLevel).Number >=
+                            if ((((_element.ParentNode[i].Parent as Grid).Parent as Grid).Parent as HierarchyLevel).Number >=
                                 (((_element.Parent as Grid).Parent as Grid).Parent as HierarchyLevel).Number)
                             {
-                                parentNode.removeChild(_element);
+                                _element.ParentNode[i].removeChild(_element);
+                                _element.ParentNode.Remove(_element.ParentNode[i]);
+                                i--;
                             }
+                        }
+
+                        //удалить дуги
+                        int currentLevel = this.Number;
+                        for (int i = 0; i < _element.childrenNode.Count; i ++ )
+                        {
+                            if ((((_element.childrenNode[i].Parent as Grid).Parent as Grid).Parent as HierarchyLevel).Number <=
+                                (((_element.Parent as Grid).Parent as Grid).Parent as HierarchyLevel).Number)
+                            {
+                                _element.childrenNode[i].ParentNode.Remove(_element);
+                                _element.removeChild(_element.childrenNode[i]);
+                                i--;
+                            }
+
                         }
 
                         e.Effects = DragDropEffects.Move;
