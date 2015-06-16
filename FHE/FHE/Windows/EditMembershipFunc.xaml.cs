@@ -30,19 +30,73 @@ namespace FHE.Windows
         {
             InitializeComponent();
             CurrentNode = node;
-
-            //Отрисовать форму
-            print_form();
+            
+            //Проверить наличие функции принадлежности
+            if (node.MembershipFunction.Count != 0)
+            {
+                this.MF.ItemsSource = node.MembershipFunction;
+                //Отрисовать форму
+                print_form(true);
+            }
+            else
+            {
+                //Отрисовать форму
+                print_form(false);
+            }
         }
 
-        private void print_form()
+        private void print_form(bool full)
         {
             DomainMF domain = new DomainMF(this);
-
             this.StackStep.Children.Insert(this.StackStep.Children.Count, domain);
+            this.Graphics.Title = CurrentNode.FullName;
 
-            this.Graphics.Title = CurrentNode.name;
-            
+            if (full)
+            {
+                double start = -1, end = -1;
+                domain.Unit.Text = CurrentNode.UnitMF;
+                domain.MinAxisX.Text = Convert.ToString(CurrentNode.StartXMF);
+                domain.MaxAxisX.Text = Convert.ToString(CurrentNode.EndXMF);
+                domain.IsEnabled = false;
+
+                IdealValueMF Ideal = new IdealValueMF(this);
+                this.StackStep.Children.Insert(this.StackStep.Children.Count, Ideal);
+
+                foreach (Point point in CurrentNode.MembershipFunction)
+                {
+                    if (point.Y == 1)
+                    {
+                        if (start == -1 && end == -1)
+                        {
+                            start = end = point.X;
+                        }
+                        if (point.X < start)
+                        {
+                            start = point.X;
+                        }
+                        if (point.X > end)
+                        {
+                            end = point.X;
+                        }
+                    }
+                }
+
+                Ideal.IdealX1.Text = Convert.ToString(start);
+                Ideal.IdealX2.Text = Convert.ToString(end);
+                Ideal.IsEnabled = false;
+
+                PointsMF Points = new PointsMF(this);
+                this.StackStep.Children.Insert(this.StackStep.Children.Count, Points);
+
+                foreach (Point point in CurrentNode.MembershipFunction)
+                {
+                    if (point.Y != 1)
+                    {
+                        DescriptionPoint Point = new DescriptionPoint(Points, this, new Point(point.X, point.Y));
+                        Points.StackPointMF.Children.Add(Point);
+                    }
+                }
+            }
         }
     }
 }

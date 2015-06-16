@@ -22,12 +22,11 @@
             <chartingToolkit:LineSeries Name="MF" DependentValuePath="Y" IndependentValuePath="X"/>
             <chartingToolkit:LineSeries Name="SMF" DependentValuePath="Y" IndependentValuePath="X" Background="Red"/>
             <chartingToolkit:Chart.Axes>
-                <chartingToolkit:LinearAxis Orientation="Y" Minimum="0" Maximum="1.1" Title="Степень принадлежности" Margin="0,0,0,-15" />
+                <chartingToolkit:LinearAxis Orientation="Y" Minimum="0" Maximum="1.1" Title="" Margin="0,0,0,-15" />
                 <chartingToolkit:LinearAxis Orientation="X" ShowGridLines="True" x:Name="AxisX"/>
             </chartingToolkit:Chart.Axes>
         </chartingToolkit:Chart>
-        <ProgressBar x:Name="ProgressCalculation" Minimum="0" Maximum="100" Value="0" Grid.Row="2" Height="25"/>
-        <TextBlock x:Name="ProgressText" Text="{Binding ElementName=ProgressCalculation, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2"/>
+        <ProgressBar x:Name="ProgressCalculation" IsIndeterminate="False" Height="10" Width="200" Grid.Row="2"/>
         <StackPanel x:Name="StackDefinitionResults" Grid.Row="2" Visibility="Hidden" Orientation="Vertical"/>
         <Button x:Name="SaveResults" Content="Сохранить результат" Grid.Row="3" Width="150" HorizontalAlignment="Left" Visibility="Hidden"/>
         <Button x:Name="StartCalculate" Content="Старт" Grid.Row="3" Width="100" HorizontalAlignment="Left" Click="StartCalculate_Click"/>

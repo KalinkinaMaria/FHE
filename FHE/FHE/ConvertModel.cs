@@ -42,7 +42,7 @@ namespace FHE
             HierarchyGoal NewViewGoal = addingCanvas.stackNode.Children[addingCanvas.stackNode.Children.Count - 1] as HierarchyGoal;
 
             NewViewGoal.LinkFunc = ModelGoal.communicationFunction.representationFunc;
-            NewViewGoal.name = ModelGoal.FullName;
+            NewViewGoal.setFullName(ModelGoal.FullName);
             NewViewGoal.textNode.Text = ModelGoal.name;
             NewViewGoal.UnitMF = ModelGoal.desirabilityGoal.Unit;
             NewViewGoal.StartXMF = ModelGoal.desirabilityGoal.StartX;
@@ -98,7 +98,7 @@ namespace FHE
                 NewNode = addingCanvas.stackNode.Children[addingCanvas.stackNode.Children.Count - 1] as HierarchyNode;
             }
 
-            NewNode.name = ModelChild.FullName;
+            NewNode.setFullName(ModelChild.FullName);
             if (ModelChild.communicationFunction != null)
             {
                 NewNode.LinkFunc = ModelChild.communicationFunction.representationFunc;
@@ -146,7 +146,7 @@ namespace FHE
 
         private static Goal GoalFromViewToModel(HierarchyGoal ViewGoal)
         {
-            Goal NewGoal = new Goal(new MembershipFunction(ViewGoal.MembershipFunction, ViewGoal.UnitMF, ViewGoal.StartXMF, ViewGoal.EndXMF), ViewGoal.textNode.Text, new Function(ViewGoal.LinkFunc), ViewGoal.name);
+            Goal NewGoal = new Goal(new MembershipFunction(ViewGoal.MembershipFunction, ViewGoal.UnitMF, ViewGoal.StartXMF, ViewGoal.EndXMF), ViewGoal.textNode.Text, new Function(ViewGoal.LinkFunc), ViewGoal.FullName);
 
             ChildrenFromViewToModel(NewGoal, ViewGoal, 2);
 
@@ -155,7 +155,7 @@ namespace FHE
 
         private static Characteristic CharacteristicFromViewToModel(HierarchyNode ViewNode, int Level)
         {
-            Characteristic NewCharacteristic = new Characteristic(new MembershipFunction(ViewNode.MembershipFunction, ViewNode.UnitMF, ViewNode.StartXMF, ViewNode.EndXMF), ViewNode.textNode.Text, new Function(ViewNode.LinkFunc), ViewNode.name, Level);
+            Characteristic NewCharacteristic = new Characteristic(new MembershipFunction(ViewNode.MembershipFunction, ViewNode.UnitMF, ViewNode.StartXMF, ViewNode.EndXMF), ViewNode.textNode.Text, new Function(ViewNode.LinkFunc), ViewNode.FullName, Level);
 
             return NewCharacteristic;
         }

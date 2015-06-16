@@ -100,8 +100,8 @@ namespace FHE.Controls
                 if ((this.stackNode.Children[i] as AbstractHierarchyNode).LinkFunc == "")
                 {
                     (this.stackNode.Children[i] as AbstractHierarchyNode).formNode.Fill = Brushes.MediumBlue;
-                    (this.stackNode.Children[i] as AbstractHierarchyNode).IsNeedFuncLink = true;
                 }
+                (this.stackNode.Children[i] as AbstractHierarchyNode).IsNeedFuncLink = true;
             }
         }
 
@@ -126,6 +126,43 @@ namespace FHE.Controls
             {
                 (this.stackNode.Children[i] as AbstractHierarchyNode).setColorForm();
             }
+        }
+
+        internal bool containsParentNode()
+        {
+            bool result = true;
+            for (int i = 0; i < this.stackNode.Children.Count; i++)
+            {
+                if ((this.stackNode.Children[i] as AbstractHierarchyNode).ParentNode.Count == 0)
+                {
+                    result = false;
+                    return result;
+                }
+            }
+            return result;
+        }
+
+        internal bool correctFuncLink(Window owner)
+        {
+            AbstractHierarchyNode currentNode; 
+            List<String> args = new List<String>();
+            bool result = true;
+            
+            for (int i = 0; i < this.stackNode.Children.Count; i++)
+            {
+                currentNode = (this.stackNode.Children[i] as AbstractHierarchyNode);
+                foreach (HierarchyNode node in currentNode.childrenNode)
+                {
+                    args.Add(node.textNode.Text);
+                }
+                if (!CheckFunctionLinc.check(currentNode.textNode.Text, currentNode.LinkFunc, args.ToArray(), owner))
+                {
+                    result = false;
+                    return result;
+                }
+                args.Clear();
+            }
+            return result;
         }
     }
 }

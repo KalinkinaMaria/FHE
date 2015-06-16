@@ -20,10 +20,16 @@ namespace FHE.Controls
     public partial class HierarchyNode : AbstractHierarchyNode
     {
         private static int global_id = 1;
+
         public int id
         {
             get;
             private set;
+        }
+
+        public static void clearGlobalId()
+        {
+            global_id = 1;
         }
 
         public HierarchyNode()

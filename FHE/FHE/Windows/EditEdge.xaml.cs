@@ -33,7 +33,7 @@ namespace FHE.Windows
 
             _node = node;
 
-            this.nameWindow.Content = _foreword + "X" + node.id + " (" + node.name + ")";
+            this.nameWindow.Content = _foreword + "X" + node.id + " (" + node.FullName + ")";
             this.fillEdge(node.childrenNode);
             Grid t = (node.Parent as Grid);
             t = t.Parent as Grid;
@@ -64,7 +64,7 @@ namespace FHE.Windows
 
             _goal = goal;
 
-            this.nameWindow.Content = _foreword + "Q" + goal.getId() + " (" + goal.name + ")";
+            this.nameWindow.Content = _foreword + "Q" + goal.getId() + " (" + goal.FullName + ")";
             this.fillEdge(goal.childrenNode);
             Grid t = (goal.Parent as Grid);
             t = t.Parent as Grid;

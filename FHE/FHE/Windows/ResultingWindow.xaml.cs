@@ -50,6 +50,7 @@ namespace FHE.Windows
 
             CalculateProcess = new Process(Goals);
             CalculateProcess.StartCalculation();
+            this.ProgressCalculation.IsIndeterminate = true;
 
             //Вывод результата
             List<Point> result =  CalculateProcess.GetResultMembershipFunction(0);
@@ -60,7 +61,6 @@ namespace FHE.Windows
             this.StackDefinitionResults.Visibility = System.Windows.Visibility.Visible;
             this.ProgressCalculation.Visibility = System.Windows.Visibility.Hidden;
             this.StartCalculate.Visibility = System.Windows.Visibility.Hidden;
-            this.ProgressText.Visibility = System.Windows.Visibility.Hidden;
             List<MFPoint> results = CalculateProcess.GetResults();
             PrintResult(results[0], Goals[0]);
         }
@@ -68,7 +68,7 @@ namespace FHE.Windows
         private void PrintResult(MFPoint ResultPoint, HierarchyGoal ResultGoal)
         {
             TextBlock strResult = new TextBlock();
-            strResult.Text = "Оптимальное решение для цели ";
+            strResult.Text = "Оптимальное решение: ";
             strResult.TextWrapping = TextWrapping.WrapWithOverflow;
             this.StackDefinitionResults.Children.Add(strResult);
 
@@ -76,7 +76,7 @@ namespace FHE.Windows
             goalResult.TextWrapping = TextWrapping.WrapWithOverflow;
             goalResult.Text = ResultGoal.textNode.Text;
             goalResult.Text += " (";
-            goalResult.Text += ResultGoal.name;
+            goalResult.Text += ResultGoal.FullName;
             goalResult.Text += ") = ";
             goalResult.Text += Convert.ToString(ResultPoint.x);
             goalResult.Text += " ";
@@ -99,11 +99,6 @@ namespace FHE.Windows
                 characteristic.TextWrapping = TextWrapping.WrapWithOverflow;
                 this.StackDefinitionResults.Children.Add(characteristic);
             }
-        }
-
-        public static void IncProgressBar()
-        {
-            ResultingWindow.CalculatePB.Value += 100 / ResultingWindow.FactorIncProgressBar;
         }
     }
 }

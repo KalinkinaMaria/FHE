@@ -40,6 +40,29 @@ namespace FHE
             this.stackLevel.Children.Insert(0, addingCanvas);
         }
 
+        public void Clear()
+        {
+            for( int i = 0; i < this.stackLevel.Children.Count; i ++ )
+            {
+                if (this.stackLevel.Children[i] is HierarchyLevelForNode)
+                {
+                    this.stackLevel.Children.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            (this.stackLevel.Children[0] as HierarchyLevelForGoal).stackNode.Children.Clear();
+
+            //Парсер
+            ParserXML.Clear();
+
+            //Перерисовать дуги
+            repaintEdge();
+
+            //Обнулить id
+            HierarchyNode.clearGlobalId();
+        }
+
         public void repaintEdge()
         {
             //удалить старые линии
@@ -96,14 +119,29 @@ namespace FHE
             }
         }
 
+        public void open_function()
+        {
+            int count = this.stackLevel.Children.Count;
+
+            for (int i = 1; i < count - 1; i++)
+            {
+                (this.stackLevel.Children[i] as HierarchyLevel).deleteButton.Visibility = System.Windows.Visibility.Visible;
+            }
+        }
+
         private bool is_correct()
         {
             bool result = true;
             int count = this.stackLevel.Children.Count;
             switch (mode)
             {
-                case Mode.EDIT_HIERARCHY: 
+                case Mode.EDIT_HIERARCHY:
 
+                    if (count == 2)
+                    {
+                        result = false;
+                        return result;
+                    }
                     for (int i = 0; i < count - 2; i++)
                     {
                         if (!(this.stackLevel.Children[i] as HierarchyLevel).containsDependence())
@@ -112,12 +150,25 @@ namespace FHE
                             return result;
                         }
                     }
+                    if (!(this.stackLevel.Children[this.stackLevel.Children.Count-2] as HierarchyLevel).containsParentNode())
+                    {
+                        result = false;
+                        return result;
+                    }
                 break;
                 case Mode.EDIT_FUNC_LINK:
 
                     for (int i = 0; i < count - 2; i++)
                     {
                         if (!(this.stackLevel.Children[i] as HierarchyLevel).containsFuncLink())
+                        {
+                            //переделать сообщ.
+                            System.Windows.MessageBox.Show(this, "Не для всех характеристик были введены ф-ции связи.",
+                   "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                            result = false;
+                            return result;
+                        }
+                        if (!(this.stackLevel.Children[i] as HierarchyLevel).correctFuncLink(this))
                         {
                             result = false;
                             return result;
@@ -131,6 +182,8 @@ namespace FHE
 
         private void Mode_Up(object sender, RoutedEventArgs e)
         {
+            int count = this.stackLevel.Children.Count;
+            int countNode = 0;
             switch (mode)
             {
                 case Mode.EDIT_HIERARCHY:
@@ -138,15 +191,25 @@ namespace FHE
                     if (!is_correct())
                     {
                         //переделать сообщ.
-                        System.Windows.MessageBox.Show(this, "Характеристики средних уровней не имеют зависимсотей. Переместите характеристику на нижний уровень или добавте зависимости.",
+                        System.Windows.MessageBox.Show(this, "Неверная структура системы: имеется несвязная вершина",
                "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
+                    }
+                    for (int i = 0; i < count - 1; i++)
+                    {
+                        countNode += (this.stackLevel.Children[i] as HierarchyLevel).stackNode.Children.Count;
+                        if (countNode == 0)
+                        {
+                            System.Windows.MessageBox.Show(this, "Не добавлена ни одна вершина.",
+               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
                     }
 
                     mode = Mode.EDIT_FUNC_LINK;
                     this.nameMode.Text = "Определение зависимости между характеристиками путем задания функций связи (для выделенных вершин)";
                     this.back.IsEnabled = true;
-                    this.addLevel.Visibility = System.Windows.Visibility.Hidden;
+                    this.addLevel.IsEnabled = false;
 
                     //TO DO Закрасить вершины, для которых неодходимо добавить функции связи
                     close_function();
@@ -156,9 +219,7 @@ namespace FHE
                     //Проверка заполненности всех ф-ций связи
                     if (!is_correct())
                     {
-                        //переделать сообщ.
-                        System.Windows.MessageBox.Show(this, "Не для всех характеристик были введены ф-ции связи.",
-               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                        
                         return;
                     }
                     mode = Mode.EDIT_FUNK_MEMBERSHIP;
@@ -208,8 +269,9 @@ namespace FHE
                     mode = Mode.EDIT_HIERARCHY;
                     this.back.IsEnabled = false;
                     this.nameMode.Text = "Создание иерархии характеристик";
-                    this.addLevel.Visibility = System.Windows.Visibility.Visible;
+                    this.addLevel.IsEnabled = true;
                     //TO DO Отменить закрашивание
+                    open_function();
                     paint_node_for_start();
                     break;
                 case Mode.EDIT_FUNK_MEMBERSHIP:
@@ -239,6 +301,8 @@ namespace FHE
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
+            Clear();
+
             String filename;
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.FileName = "Document"; 
@@ -277,6 +341,34 @@ namespace FHE
         }
 
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            String filename;
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = "Document";
+            dlg.DefaultExt = ".xml";
+            dlg.Filter = "Файл описания системы (.xml)|*.xml";
+
+            Nullable<bool> result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                filename = dlg.FileName;
+            }
+            else
+            {
+                return;
+            }
+
+            List<HierarchyLevel> levels = new List<HierarchyLevel>();
+            for (int i = 0; i < this.stackLevel.Children.Count - 1; i ++ )
+            {
+                levels.Add(this.stackLevel.Children[i] as HierarchyLevel);
+            }
+
+            ParserXML.SaveToFile(filename, levels);
+        }
+
+        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
         {
 
         }

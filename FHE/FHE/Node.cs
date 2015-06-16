@@ -26,10 +26,7 @@ namespace FHE
             communicationFunction = new Function();
         }
 
-        public virtual void calcMembershipFunc()
-        {
-
-        }
+        public abstract void calcMembershipFunc();
 
         public void AddChild(Node Child)
         {

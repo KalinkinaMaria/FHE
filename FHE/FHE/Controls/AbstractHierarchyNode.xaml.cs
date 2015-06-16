@@ -60,10 +60,16 @@ namespace FHE.Controls
             }
         }
 
-        public string name
+        public string FullName
         {
-            get;
-            set;
+            get
+            {
+                if (this.parent.ToolTip == null)
+                {
+                    return "";
+                }
+                return this.parent.ToolTip.ToString();
+            }
         }
 
         public List<HierarchyNode> childrenNode
@@ -95,9 +101,9 @@ namespace FHE.Controls
             }
         }
 
-        public void removeChild(AbstractHierarchyNode node)
+        public void removeChild(HierarchyNode node)
         {
-            childrenNode.Remove(node as HierarchyNode);
+            childrenNode.Remove(node);
         }
 
         public bool containsChild (int index)
@@ -113,11 +119,12 @@ namespace FHE.Controls
         public AbstractHierarchyNode()
         {
             InitializeComponent();
-            LinkFunc = "";
-            IsNeedFuncLink = false;
-            IsNeedMF = false;
-            childrenNode = new List<HierarchyNode>();
-            ParentNode = new List<AbstractHierarchyNode>();
+            this.LinkFunc = "";
+            this.IsNeedFuncLink = false;
+            this.IsNeedMF = false;
+            this.childrenNode = new List<HierarchyNode>();
+            this.ParentNode = new List<AbstractHierarchyNode>();
+            this.parent.ToolTip = "";
         }
 
         public void delete()
@@ -201,7 +208,7 @@ namespace FHE.Controls
         {
             foreach (AbstractHierarchyNode parentNode in this.ParentNode)
             {
-                parentNode.removeChild(this);
+                parentNode.removeChild(this as HierarchyNode);
             }
             this.delete();
 
@@ -223,8 +230,12 @@ namespace FHE.Controls
         {
             EnterName text = new EnterName();
             text.ShowDialog();
-            name = text.getName();
-            this.parent.ToolTip = this.name;
+            this.parent.ToolTip = text.getName();
+        }
+
+        public void setFullName(String fullName)
+        {
+            this.parent.ToolTip = fullName;
         }
 
         private void addFuncLink_Click(object sender, RoutedEventArgs e)
