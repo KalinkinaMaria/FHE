@@ -137,11 +137,6 @@ namespace FHE
             {
                 case Mode.EDIT_HIERARCHY:
 
-                    if (count == 2)
-                    {
-                        result = false;
-                        return result;
-                    }
                     for (int i = 0; i < count - 2; i++)
                     {
                         if (!(this.stackLevel.Children[i] as HierarchyLevel).containsDependence())
@@ -192,7 +187,7 @@ namespace FHE
                     {
                         //переделать сообщ.
                         System.Windows.MessageBox.Show(this, "Неверная структура системы: имеется несвязная вершина",
-               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+               "Для перехода требуется верная структура иерархии", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
                     for (int i = 0; i < count - 1; i++)
@@ -201,7 +196,7 @@ namespace FHE
                         if (countNode == 0)
                         {
                             System.Windows.MessageBox.Show(this, "Не добавлена ни одна вершина.",
-               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+               "Для перехода требуется верная структура иерархии", MessageBoxButton.OK, MessageBoxImage.Warning);
                             return;
                         }
                     }
@@ -219,7 +214,6 @@ namespace FHE
                     //Проверка заполненности всех ф-ций связи
                     if (!is_correct())
                     {
-                        
                         return;
                     }
                     mode = Mode.EDIT_FUNK_MEMBERSHIP;
