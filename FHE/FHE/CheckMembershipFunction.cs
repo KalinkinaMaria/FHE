@@ -13,6 +13,9 @@ namespace FHE
         {
             bool isDownturn = false;
 
+            //Сортировка
+            sortPoint(0, points.Count - 1, points);
+
             for (int i = 1; i < points.Count; i ++ )
             {
                 if (points[i].Y < points[i - 1].Y)
@@ -39,6 +42,35 @@ namespace FHE
                 }
             }
             return true;
+        }
+
+        private static void sortPoint(int first, int last, List<Point> points)
+        {
+            int i = first, j = last;
+            double middle = points[(first + last) / 2].X;
+
+            do
+            {
+                while (points[i].X < middle) i++;
+                while (points[j].X > middle) j--;
+
+                if (i <= j)
+                {
+                    if (points[i].X > points[j].X)
+                    {
+                        Point tmp = points[i];
+                        points[i] = points[j];
+                        points[j] = tmp;
+                    }
+                    i++;
+                    j--;
+                }
+            } while (i <= j);
+
+            if (i < last)
+                sortPoint(i, last, points);
+            if (first < j)
+                sortPoint(first, j, points);
         }
 
     }
