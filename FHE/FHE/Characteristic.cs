@@ -34,7 +34,6 @@ namespace FHE
                 foreach (Node child in children)
                 {
                     child.calcMembershipFunc();
-                    ResultingWindow.IncProgressBar();
                 }
 
                 //создание таблицы сочетаний точек функций принадлежности всех детей узла

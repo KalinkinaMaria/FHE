@@ -11,7 +11,6 @@ namespace FHE
         public String Unit;
         public double StartX;
         public double EndX;
-
         public List<MFPoint> points = new List<MFPoint>();
 
         public MembershipFunction()
