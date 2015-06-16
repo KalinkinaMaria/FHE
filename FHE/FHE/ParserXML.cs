@@ -1,7 +1,10 @@
-﻿using System;
+﻿using FHE.Controls;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Xml;
 
 namespace FHE
@@ -18,6 +21,153 @@ namespace FHE
         private static double CurrentStartX;
         private static double CurrentEndX;
         private static String CurrentUnit;
+
+        public static void SaveToFile(String filename, List<HierarchyLevel> levels)
+        {
+            Dictionary<String, List<String>> transition = new Dictionary<string, List<string>>();
+
+            XmlTextWriter textWritter = new XmlTextWriter(filename, null);
+            textWritter.WriteStartElement("ROOT");
+            textWritter.WriteEndElement();
+            textWritter.Close();
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(filename);
+
+            XmlElement currentElement;
+            XmlAttribute currentAttr;
+            foreach (HierarchyLevel level in levels)
+            {
+                foreach (AbstractHierarchyNode node in level.stackNode.Children)
+                {
+                    if (node is HierarchyGoal)
+                    {
+                        currentElement = xmlDoc.CreateElement("HIGH");
+                        currentAttr = xmlDoc.CreateAttribute("name");
+                        currentAttr.Value = node.textNode.Text;
+                        currentElement.Attributes.Append(currentAttr);
+                        currentAttr = xmlDoc.CreateAttribute("level");
+                        currentAttr.Value = "1";
+                        currentElement.Attributes.Append(currentAttr);
+                        currentAttr = xmlDoc.CreateAttribute("fullName");
+                        currentAttr.Value = node.FullName;
+                        currentElement.Attributes.Append(currentAttr);
+
+                        XmlElement functionElement = xmlDoc.CreateElement("FUNCTION");
+                        currentAttr = xmlDoc.CreateAttribute("name");
+                        currentAttr.Value = node.LinkFunc;
+                        functionElement.Attributes.Append(currentAttr);
+                        currentElement.AppendChild(functionElement);
+
+                        XmlElement mf = xmlDoc.CreateElement("MF");
+                        currentAttr = xmlDoc.CreateAttribute("unit");
+                        currentAttr.Value = node.UnitMF;
+                        mf.Attributes.Append(currentAttr);
+                        currentAttr = xmlDoc.CreateAttribute("startX");
+                        currentAttr.Value = Convert.ToString(node.StartXMF);
+                        mf.Attributes.Append(currentAttr);
+                        currentAttr = xmlDoc.CreateAttribute("endX");
+                        currentAttr.Value = Convert.ToString(node.EndXMF);
+                        mf.Attributes.Append(currentAttr);
+
+                        foreach (Point point in node.MembershipFunction)
+                        {
+                            XmlElement elementPoint = xmlDoc.CreateElement("POINT");
+                            currentAttr = xmlDoc.CreateAttribute("x");
+                            currentAttr.Value = Convert.ToString(point.X);
+                            elementPoint.Attributes.Append(currentAttr);
+                            currentAttr = xmlDoc.CreateAttribute("y");
+                            currentAttr.Value = Convert.ToString(point.Y);
+                            elementPoint.Attributes.Append(currentAttr);
+                            mf.AppendChild(elementPoint);
+                        }
+                        currentElement.AppendChild(mf);
+                        xmlDoc.DocumentElement.AppendChild(currentElement); 
+                    }
+                    else if (level.Number == levels.Count)
+                    {
+                        currentElement = xmlDoc.CreateElement("LOW");
+                        currentAttr = xmlDoc.CreateAttribute("name");
+                        currentAttr.Value = node.textNode.Text;
+                        currentElement.Attributes.Append(currentAttr);
+                        currentAttr = xmlDoc.CreateAttribute("level");
+                        currentAttr.Value = Convert.ToString(level.Number);
+                        currentElement.Attributes.Append(currentAttr);
+                        currentAttr = xmlDoc.CreateAttribute("fullName");
+                        currentAttr.Value = node.FullName;
+                        currentElement.Attributes.Append(currentAttr);
+
+                        XmlElement mf = xmlDoc.CreateElement("MF");
+                        currentAttr = xmlDoc.CreateAttribute("unit");
+                        currentAttr.Value = node.UnitMF;
+                        mf.Attributes.Append(currentAttr);
+                        currentAttr = xmlDoc.CreateAttribute("startX");
+                        currentAttr.Value = Convert.ToString(node.StartXMF);
+                        mf.Attributes.Append(currentAttr);
+                        currentAttr = xmlDoc.CreateAttribute("endX");
+                        currentAttr.Value = Convert.ToString(node.EndXMF);
+                        mf.Attributes.Append(currentAttr);
+
+                        foreach (Point point in node.MembershipFunction)
+                        {
+                            XmlElement elementPoint = xmlDoc.CreateElement("POINT");
+                            currentAttr = xmlDoc.CreateAttribute("x");
+                            currentAttr.Value = Convert.ToString(point.X);
+                            elementPoint.Attributes.Append(currentAttr);
+                            currentAttr = xmlDoc.CreateAttribute("y");
+                            currentAttr.Value = Convert.ToString(point.Y);
+                            elementPoint.Attributes.Append(currentAttr);
+                            mf.AppendChild(elementPoint);
+                        }
+                        currentElement.AppendChild(mf);
+                        xmlDoc.DocumentElement.AppendChild(currentElement); 
+                    }
+                    else
+                    {
+                        currentElement = xmlDoc.CreateElement("MID");
+                        currentAttr = xmlDoc.CreateAttribute("name");
+                        currentAttr.Value = node.textNode.Text;
+                        currentElement.Attributes.Append(currentAttr);
+                        currentAttr = xmlDoc.CreateAttribute("level");
+                        currentAttr.Value = Convert.ToString(level.Number);
+                        currentElement.Attributes.Append(currentAttr);
+                        currentAttr = xmlDoc.CreateAttribute("fullName");
+                        currentAttr.Value = node.FullName;
+                        currentElement.Attributes.Append(currentAttr);
+
+                        XmlElement functionElement = xmlDoc.CreateElement("FUNCTION");
+                        currentAttr = xmlDoc.CreateAttribute("name");
+                        currentAttr.Value = node.LinkFunc;
+                        functionElement.Attributes.Append(currentAttr);
+                        currentElement.AppendChild(functionElement);
+                        xmlDoc.DocumentElement.AppendChild(currentElement); 
+                    }
+                    List<String> list = new List<String>();
+                    foreach (HierarchyNode child in node.childrenNode)
+                    {
+                        list.Add(child.textNode.Text);
+                    }
+                    transition.Add(node.textNode.Text, list);
+                }
+            }
+
+            foreach (String key in transition.Keys)
+            {
+                foreach (String value in transition[key])
+                {
+                    currentElement = xmlDoc.CreateElement("TRANSITION");
+                    currentAttr = xmlDoc.CreateAttribute("parent");
+                    currentAttr.Value = key;
+                    currentElement.Attributes.Append(currentAttr);
+                    currentAttr = xmlDoc.CreateAttribute("child");
+                    currentAttr.Value = value;
+                    currentElement.Attributes.Append(currentAttr);
+                    xmlDoc.DocumentElement.AppendChild(currentElement); 
+                }
+            }
+
+            xmlDoc.Save(filename);
+        }
 
         public static List<Goal> ParseXMLFile(String PathFile)
         {
@@ -210,6 +360,12 @@ namespace FHE
                     break;
             }
             return true;
+        }
+
+        internal static void Clear()
+        {
+            Goals.Clear();
+            Characteristics.Clear();
         }
     }
 }
