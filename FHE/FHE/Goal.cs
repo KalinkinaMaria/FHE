@@ -23,6 +23,8 @@ namespace FHE
 
         private void culcResultGoal()
         {
+            List<MFPoint> results = new List<MFPoint>();
+
             //Найти пересечение
             for (int i = 0; i < desirabilityGoal.countPoints() - 1; i++)
             {
@@ -49,8 +51,26 @@ namespace FHE
                     || ((desirabilityGoal.getMFPoint(i).y >= achievementGoal.getMFPoint(begin).y)
                     && (desirabilityGoal.getMFPoint(i + 1).y <= achievementGoal.getMFPoint(end).y))))
                 {
-                    resultGoal = achievementGoal.getMFPoint((end + begin) / 2);
-                    return;
+
+                    if (Math.Abs(desirabilityGoal.getMFPoint(i).x - achievementGoal.getMFPoint(begin).x) + Math.Abs(desirabilityGoal.getMFPoint(i+1).x - achievementGoal.getMFPoint(begin).x)
+                        >= Math.Abs(desirabilityGoal.getMFPoint(i).x - achievementGoal.getMFPoint(end).x) + Math.Abs(desirabilityGoal.getMFPoint(i + 1).x - achievementGoal.getMFPoint(end).x))
+                    {
+                        results.Add(achievementGoal.getMFPoint(end));
+                    }
+                    else
+                    {
+                        results.Add(achievementGoal.getMFPoint(begin));
+                    }
+                }
+            }
+
+            //Выбор максимального значения
+            resultGoal = results[0];
+            for (int i = 1; i < results.Count; i ++ )
+            {
+                if (results[i].y >= resultGoal.y)
+                {
+                    resultGoal = results[i];
                 }
             }
         }
