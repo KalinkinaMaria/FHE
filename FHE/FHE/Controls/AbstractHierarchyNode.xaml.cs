@@ -154,20 +154,6 @@ namespace FHE.Controls
             onChange();
         }
 
-        public int CountEdgesWithChild()
-        {
-            int result = 0;
-
-            result += this.childrenNode.Count;
-
-            foreach (HierarchyNode Child in this.childrenNode)
-            {
-                result += Child.CountEdgesWithChild();
-            }
-
-            return result;
-        }
-
         private void Grid_MouseEnter(object sender, MouseEventArgs e)
         {
             if (MainWindow.mode == MainWindow.Mode.EDIT_HIERARCHY)
@@ -243,10 +229,14 @@ namespace FHE.Controls
             EditFuncLink window = new EditFuncLink(this);
             window.ShowDialog();
 
+            this.LinkFunc = window.getFuncLink();
             if (window.isCorrect())
             {
-                this.LinkFunc = window.getFuncLink();
                 setColorForm();
+            }
+            else
+            {
+                this.formNode.Fill = Brushes.MediumBlue;
             }
         }
 
@@ -256,6 +246,11 @@ namespace FHE.Controls
         {
             EditMembershipFunc window = new EditMembershipFunc(this);
             window.ShowDialog();
+
+            if (this.MembershipFunction.Count != 0)
+            {
+                setColorForm();
+            }
         }
     }
 }

@@ -151,7 +151,7 @@ namespace FHE
                         return result;
                     }
                 break;
-                case Mode.EDIT_FUNC_LINK:
+                case Mode.EDIT_FUNK_MEMBERSHIP:
 
                     for (int i = 0; i < count - 2; i++)
                     {
@@ -167,6 +167,27 @@ namespace FHE
                         {
                             result = false;
                             return result;
+                        }
+                    }
+                    HierarchyLevel FirstLevel = (this.stackLevel.Children[0] as HierarchyLevel);
+                    for (int i = 0; i < FirstLevel.stackNode.Children.Count; i++)
+                    {
+                        if ((FirstLevel.stackNode.Children[i] as AbstractHierarchyNode).MembershipFunction.Count == 0)
+                        {
+                            System.Windows.MessageBox.Show(this, "Не для всех целей были введены ф-ции принадлежности.",
+                   "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return false;
+                        }
+                    }
+
+                    HierarchyLevel LastLevel = (this.stackLevel.Children[this.stackLevel.Children.Count - 2] as HierarchyLevel);
+                    for (int i = 0; i < LastLevel.stackNode.Children.Count; i++)
+                    {
+                        if ((LastLevel.stackNode.Children[i] as AbstractHierarchyNode).MembershipFunction.Count == 0)
+                        {
+                            System.Windows.MessageBox.Show(this, "Вершина " + (LastLevel.stackNode.Children[i] as AbstractHierarchyNode).textNode.Text + 
+                                " .Не введена функция принадлежности.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return false;
                         }
                     }
                 break;
@@ -211,11 +232,6 @@ namespace FHE
                     paint_node_for_func_link();
                     break;
                 case Mode.EDIT_FUNC_LINK:
-                    //Проверка заполненности всех ф-ций связи
-                    if (!is_correct())
-                    {
-                        return;
-                    }
                     mode = Mode.EDIT_FUNK_MEMBERSHIP;
                     this.nameMode.Text = "Определение желательности достижения цели и возможности реализации характеристик";
                     this.forward.Content = "Рассчитать";
@@ -223,10 +239,31 @@ namespace FHE
                     print_node_for_MF();
                     break;
                 case Mode.EDIT_FUNK_MEMBERSHIP:
+                    //Проверка системы
+                    if (!is_correct())
+                    {
+                        for (int i = 0; i < this.stackLevel.Children.Count - 1; i ++ )
+                        {
+                            HierarchyLevel Level = (this.stackLevel.Children[i] as HierarchyLevel);
+                            for (int j = 0; j < Level.stackNode.Children.Count; j ++ )
+                            {
+                                AbstractHierarchyNode currentNode = (Level.stackNode.Children[i] as AbstractHierarchyNode);
+                                List<String> args = new List<String>();
+                                foreach (HierarchyNode node in currentNode.childrenNode)
+                                {
+                                    args.Add(node.textNode.Text);
+                                }                                
+                                String[] args_copy = args.ToArray();
+                                CheckFunctionLinc.check(true, currentNode.textNode.Text, currentNode.LinkFunc, args_copy, this);
+                            }
+                        }
+                        
+                        return;
+                    }
                     mode = Mode.CALC_RESULT;
                     this.forward.IsEnabled = false;
                     this.nameMode.Text = "Рассчитать оптимальное достижение цели";
-                    //TO DO открыть окно с рассчетом
+                    //TO DO открыть окно с рассчетом                    
                     ResultingWindow Window = new ResultingWindow((this.stackLevel.Children[0] as HierarchyLevelForGoal).GetGoals());
                     Window.ShowDialog();
                     break;
@@ -249,6 +286,15 @@ namespace FHE
             {
                 (LastLevel.stackNode.Children[i] as AbstractHierarchyNode).formNode.Fill = Brushes.Orange;
                 (LastLevel.stackNode.Children[i] as AbstractHierarchyNode).IsNeedMF = true;
+            }
+
+            for (int i = 0; i < this.stackLevel.Children.Count - 1; i ++ )
+            {
+                HierarchyLevel Level = (this.stackLevel.Children[i] as HierarchyLevel);
+                for (int j = 0; j < Level.stackNode.Children.Count; j ++ )
+                {
+                    (Level.stackNode.Children[j] as AbstractHierarchyNode).formNode.Stroke = Brushes.White;
+                }
             }
             
         }
@@ -273,6 +319,8 @@ namespace FHE
                     this.nameMode.Text = "Определение зависимости между характеристиками путем задания функций связи";
                     this.forward.Content = "Вперед";
                     //TO DO Закрасить вершины, для которых неодходимо добавить функции связи
+                    paint_node_for_start();
+                    paint_node_for_func_link();
                     break;
                 case Mode.CALC_RESULT:
                     this.forward.IsEnabled = true;
@@ -287,7 +335,7 @@ namespace FHE
         {
             int count = this.stackLevel.Children.Count;
 
-            for (int i = 0; i < count - 2; i++)
+            for (int i = 0; i < count - 1; i++)
             {
                 (this.stackLevel.Children[i] as HierarchyLevel).paint_node_for_start();
             }

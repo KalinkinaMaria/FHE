@@ -31,8 +31,8 @@ namespace FHE.Controls
         {
             try
             {
-                this.Parent.PointsMF.Add(new Point(Convert.ToDouble(this.IdealX1.Text), 1));
-                this.Parent.PointsMF.Add(new Point(Convert.ToDouble(this.IdealX2.Text), 1));
+                this.Parent.PointsMF.Add(new Point(Convert.ToDouble(this.IdealX1.Text.Replace('.', ',')), 1));
+                this.Parent.PointsMF.Add(new Point(Convert.ToDouble(this.IdealX2.Text.Replace('.', ',')), 1));
             }
             catch (FormatException exept)
             {

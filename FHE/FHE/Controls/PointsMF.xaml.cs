@@ -40,8 +40,8 @@ namespace FHE.Controls
 
             try
             {
-                newX = Convert.ToDouble(this.NameX.Text);
-                newY = Convert.ToDouble(this.NameY.Text);
+                newX = Convert.ToDouble(this.NameX.Text.Replace('.', ','));
+                newY = Convert.ToDouble(this.NameY.Text.Replace('.', ','));
             }
             catch (FormatException exept)
             {

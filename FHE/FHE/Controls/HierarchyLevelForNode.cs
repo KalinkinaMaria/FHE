@@ -21,45 +21,54 @@ namespace FHE.Controls
 
         private void addNode(HierarchyNode node)
         {
-            node.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-            node.VerticalAlignment = System.Windows.VerticalAlignment.Center;
-            node.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
-            node.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
-            Grid.SetColumn(node, this.stackNode.ColumnDefinitions.Count);
-            this.stackNode.ColumnDefinitions.Add(new ColumnDefinition());
-            this.stackNode.Children.Add(node);
+            if (this.stackNode.Children.Count < 10)
+            {
+                node.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                node.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                node.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+                node.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+                Grid.SetColumn(node, this.stackNode.ColumnDefinitions.Count);
+                this.stackNode.ColumnDefinitions.Add(new ColumnDefinition());
+                this.stackNode.Children.Add(node);
+            }
         }
 
         protected override void add()
         {
-            HierarchyNode addingNode = new HierarchyNode();
-            addingNode.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-            addingNode.VerticalAlignment = System.Windows.VerticalAlignment.Center;
-            addingNode.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
-            addingNode.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
-            addingNode.textNode.Text = "X" + addingNode.id;
-            Grid.SetColumn(addingNode, this.stackNode.ColumnDefinitions.Count);
-            this.stackNode.ColumnDefinitions.Add(new ColumnDefinition());
-            this.stackNode.Children.Add(addingNode);
-            
-            addingNode.onChange += this.fairOnChange;
+            if (this.stackNode.Children.Count < 10)
+            {
+                HierarchyNode addingNode = new HierarchyNode();
+                addingNode.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                addingNode.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                addingNode.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+                addingNode.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+                addingNode.textNode.Text = "X" + addingNode.id;
+                Grid.SetColumn(addingNode, this.stackNode.ColumnDefinitions.Count);
+                this.stackNode.ColumnDefinitions.Add(new ColumnDefinition());
+                this.stackNode.Children.Add(addingNode);
+
+                addingNode.onChange += this.fairOnChange;
+            }
         }
 
         public override void add(String Name)
         {
-            String Index = Name.Replace("x", "");
-            Index = Index.Replace("X", "");
-            HierarchyNode addingNode = new HierarchyNode(Convert.ToInt32(Index));
-            addingNode.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-            addingNode.VerticalAlignment = System.Windows.VerticalAlignment.Center;
-            addingNode.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
-            addingNode.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
-            addingNode.textNode.Text = Name;
-            Grid.SetColumn(addingNode, this.stackNode.ColumnDefinitions.Count);
-            this.stackNode.ColumnDefinitions.Add(new ColumnDefinition());
-            this.stackNode.Children.Add(addingNode);
+            if (this.stackNode.Children.Count < 10)
+            {
+                String Index = Name.Replace("x", "");
+                Index = Index.Replace("X", "");
+                HierarchyNode addingNode = new HierarchyNode(Convert.ToInt32(Index));
+                addingNode.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                addingNode.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                addingNode.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+                addingNode.VerticalContentAlignment = System.Windows.VerticalAlignment.Center;
+                addingNode.textNode.Text = Name;
+                Grid.SetColumn(addingNode, this.stackNode.ColumnDefinitions.Count);
+                this.stackNode.ColumnDefinitions.Add(new ColumnDefinition());
+                this.stackNode.Children.Add(addingNode);
 
-            addingNode.onChange += this.fairOnChange;
+                addingNode.onChange += this.fairOnChange;
+            }
         }
 
         protected override void OnDrop(DragEventArgs e)
@@ -72,7 +81,7 @@ namespace FHE.Controls
                 {
                     Panel _parent = (Panel)VisualTreeHelper.GetParent(_element);
 
-                    if (_parent != null)
+                    if (_parent != null && this.stackNode.Children.Count < 10)
                     {
                         _element.delete();
                         addNode(_element);

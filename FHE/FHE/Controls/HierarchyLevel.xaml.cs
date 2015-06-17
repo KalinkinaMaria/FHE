@@ -97,11 +97,22 @@ namespace FHE.Controls
         {
             for (int i = 0; i < this.stackNode.Children.Count; i++)
             {
-                if ((this.stackNode.Children[i] as AbstractHierarchyNode).LinkFunc == "")
+                AbstractHierarchyNode currentNode = (this.stackNode.Children[i] as AbstractHierarchyNode);
+                List<String> args = new List<String>();
+                foreach (HierarchyNode node in currentNode.childrenNode)
                 {
-                    (this.stackNode.Children[i] as AbstractHierarchyNode).formNode.Fill = Brushes.MediumBlue;
+                    args.Add(node.textNode.Text);
+                }               
+                String[] args_copy = args.ToArray();
+                if (!CheckFunctionLinc.check(false, currentNode.textNode.Text, currentNode.LinkFunc, args_copy, null))
+                {
+                    currentNode.formNode.Fill = Brushes.MediumBlue;
+                    if (currentNode.LinkFunc != "")
+                    {
+                        currentNode.formNode.Stroke = Brushes.Red;
+                    }
                 }
-                (this.stackNode.Children[i] as AbstractHierarchyNode).IsNeedFuncLink = true;
+                currentNode.IsNeedFuncLink = true;
             }
         }
 
@@ -125,6 +136,7 @@ namespace FHE.Controls
             for (int i = 0; i < this.stackNode.Children.Count; i++)
             {
                 (this.stackNode.Children[i] as AbstractHierarchyNode).setColorForm();
+                (this.stackNode.Children[i] as AbstractHierarchyNode).formNode.Stroke = Brushes.White;
             }
         }
 
@@ -155,7 +167,7 @@ namespace FHE.Controls
                 {
                     args.Add(node.textNode.Text);
                 }
-                if (!CheckFunctionLinc.check(currentNode.textNode.Text, currentNode.LinkFunc, args.ToArray(), owner))
+                if (!CheckFunctionLinc.check(false, currentNode.textNode.Text, currentNode.LinkFunc, args.ToArray(), owner))
                 {
                     result = false;
                     return result;
