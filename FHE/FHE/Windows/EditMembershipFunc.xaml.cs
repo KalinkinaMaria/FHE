@@ -127,6 +127,19 @@ namespace FHE.Windows
             {
                 points.Add(new Point(mfpoint.x, mfpoint.y));
             }
+
+            if (!CheckMembershipFunction.Check(this.CurrentNode.textNode.Text, points, mf.StartX, mf.EndX, this))
+            {
+                DomainMF curDomain = new DomainMF(this);
+                this.StackStep.Children.Insert(this.StackStep.Children.Count, curDomain);
+                this.Graphics.Title = CurrentNode.FullName;
+                return;
+            }
+
+            foreach (Point point in points)
+            {
+                this.PointsMF.Add(new Point(point.X, point.X));
+            }
             this.MF.ItemsSource = points;
 
             DomainMF domain = new DomainMF(this);

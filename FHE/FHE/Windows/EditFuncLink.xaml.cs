@@ -59,12 +59,23 @@ namespace FHE.Windows
             List<String> current_args = new List<string>();
             String[] args_copy = args.ToArray();
 
-            if (CheckFunctionLinc.check(_currentNode.textNode.Text, this.nameFunc.Text, args_copy, this))
+            if (CheckFunctionLinc.check(false, _currentNode.textNode.Text, this.nameFunc.Text, args_copy, this))
             {
                 _isCorrect = true;
-                this.Close();
+                _currentNode.formNode.Stroke = Brushes.White;
             }
+            else
+            {
+                _isCorrect = false;
+                _currentNode.formNode.Stroke = Brushes.Red;
+            }
+            this.Close();
+        }
 
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            String[] args_copy = args.ToArray();
+            CheckFunctionLinc.check(true, _currentNode.textNode.Text, this.nameFunc.Text, args_copy, this);
         }
     }
 }
