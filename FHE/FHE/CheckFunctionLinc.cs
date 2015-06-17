@@ -10,12 +10,12 @@ namespace FHE.Controls
     {
         private enum CurrentValue { NONE, OPERATION, X, CONST, POINT, NULL, CLOSE_BRACKET, VAR, FLOAT };
 
-        public static bool check(String nameNode, String function, String[] args_copy, Window owner)
+        public static bool check(bool viewMessage, String nameNode, String function, String[] args_copy, Window owner)
         {
             List<String> current_args = new List<String>();
 
             //Проверить введенную функцию
-            if (!check(nameNode, function, owner))
+            if (!check(viewMessage, nameNode, function, owner))
                 return false;
 
             //Количество скобок
@@ -33,15 +33,21 @@ namespace FHE.Controls
                 }
                 if (countBracket < 0)
                 {
-                    System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: неправильная расстановка скобок",
-               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (viewMessage)
+                    {
+                        System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: неправильная расстановка скобок",
+                   "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                     return false;
                 }
             }
             if (countBracket != 0)
             {
-                System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: неправильная расстановка скобок",
-           "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (viewMessage)
+                {
+                    System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: неправильная расстановка скобок",
+               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
                 return false;
             }
 
@@ -78,8 +84,11 @@ namespace FHE.Controls
                 }
                 if (!available)
                 {
-                    System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". В функции описаны не все переменные, от которых зависит вершина: " + args_copy[i],
-                "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (viewMessage)
+                    {
+                        System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". В функции описаны не все переменные, от которых зависит вершина: " + args_copy[i],
+                    "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                     return false;
                 }
                 while (current_args.Remove(args_copy[i])) ;
@@ -93,15 +102,18 @@ namespace FHE.Controls
                 {
                     argsOver += s + " ";
                 }
-                System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Введены лишние переменные: " + argsOver,
-           "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (viewMessage)
+                {
+                    System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Введены лишние переменные: " + argsOver,
+               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
                 return false;
             }
 
             return true;
         }
 
-        private static bool check(String nameNode, String nameFunction, Window owner)
+        private static bool check(bool viewMessage, String nameNode, String nameFunction, Window owner)
         {
             CurrentValue value = CurrentValue.NONE;
             string str = nameFunction;
@@ -117,8 +129,11 @@ namespace FHE.Controls
                     || chr == '/' || chr == '^' || chr == '^'))
                 {
                     //ошибка
-                    System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: первым символом выражения не может быть " + chr,
-               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (viewMessage)
+                    {
+                        System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: первым символом выражения не может быть " + chr,
+                   "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                     return false;
                 }
                 //Проверка символа после .
@@ -126,32 +141,44 @@ namespace FHE.Controls
                     || chr == '/' || chr == '^' || chr == '-' || chr == '(' || chr == ')' || chr == 'x' || chr == 'X'))
                 {
                     //ошибка
-                    System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: после символа . не может быть " + chr + " место: " + (i + 1),
-               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (viewMessage)
+                    {
+                        System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: после символа . не может быть " + chr + " место: " + (i + 1),
+                   "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                     return false;
                 }
                 //Проверка символа после 0
                 else if (value == CurrentValue.NULL && chr != '.')
                 {
                     //ошибка
-                    System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: после символа 0 не может быть " + chr + " место: " + (i + 1),
-               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (viewMessage)
+                    {
+                        System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: после символа 0 не может быть " + chr + " место: " + (i + 1),
+                   "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                     return false;
                 }
                 //Проверка символа после float
                 else if (value == CurrentValue.FLOAT && (chr == '.' || chr == '(' || chr == 'x' || chr == 'X'))
                 {
                     //ошиба
-                    System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: после числа с плавающей точкой не может быть " + chr + " место: " + (i + 1),
-               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (viewMessage)
+                    {
+                        System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: после числа с плавающей точкой не может быть " + chr + " место: " + (i + 1),
+                   "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                     return false;
                 }
                 //Проверка символа после const
                 else if (value == CurrentValue.CONST && (chr == 'x' || chr == 'X' || chr == '('))
                 {
                     //ошибка
-                    System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: после целочисленной константы не может быть " + chr + " место: " + (i + 1),
-               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (viewMessage)
+                    {
+                        System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: после целочисленной константы не может быть " + chr + " место: " + (i + 1),
+                   "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                     return false;
                 }
                 //Проверка символа после x
@@ -159,8 +186,11 @@ namespace FHE.Controls
                     || chr == '/' || chr == '^' || chr == '-' || chr == '0' || chr == ')'))
                 {
                     //ошибка
-                    System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: после символа x не может быть " + chr + " место: " + (i + 1),
-               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (viewMessage)
+                    {
+                        System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: после символа x не может быть " + chr + " место: " + (i + 1),
+                   "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                     return false;
                 }
                 //Проверка символа после операции 
@@ -173,8 +203,11 @@ namespace FHE.Controls
                         return true;
                     }
                     //ошибка
-                    System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: после операции не может быть " + chr + " место: " + (i + 1),
-               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (viewMessage)
+                    {
+                        System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: после операции не может быть " + chr + " место: " + (i + 1),
+                   "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                     return false;
                 }
                 //Проверка символа после )
@@ -182,16 +215,22 @@ namespace FHE.Controls
                  || chr == '5' || chr == '6' || chr == '7' || chr == '8' || chr == '9' || chr == '(' || chr == 'x' || chr == 'X'))
                 {
                     //ошибка
-                    System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: после символа ) не может быть " + chr + " место: " + (i + 1),
-               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (viewMessage)
+                    {
+                        System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: после символа ) не может быть " + chr + " место: " + (i + 1),
+                   "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                     return false;
                 }
                 //Проверка символа после var
                 else if (value == CurrentValue.VAR && (chr == '.' || chr == 'x' || chr == 'X' || chr == '('))
                 {
                     //ошибка
-                    System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: после переменной не может быть " + chr + " место: " + (i + 1),
-               "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (viewMessage)
+                    {
+                        System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: после переменной не может быть " + chr + " место: " + (i + 1),
+                   "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                     return false;
                 }
                 else
