@@ -35,6 +35,12 @@ namespace FHE.Windows
             if (node.MembershipFunction.Count != 0)
             {
                 this.MF.ItemsSource = node.MembershipFunction;
+                foreach (Point mfpoint in node.MembershipFunction)
+                {
+                    PointsMF.Add(mfpoint);
+                }
+                this.AxisX.Maximum = node.EndXMF;
+                this.AxisX.Minimum = node.StartXMF;
                 //Отрисовать форму
                 print_form(true);
             }
@@ -81,8 +87,15 @@ namespace FHE.Windows
                     }
                 }
 
-                Ideal.IdealX1.Text = Convert.ToString(start);
-                Ideal.IdealX2.Text = Convert.ToString(end);
+                if (start != -1)
+                {
+                    Ideal.IdealX1.Text = Convert.ToString(start);
+                }
+                if (end != -1)
+                {
+                    Ideal.IdealX2.Text = Convert.ToString(end);
+                }
+                
                 Ideal.IsEnabled = false;
 
                 PointsMF Points = new PointsMF(this);
@@ -117,10 +130,23 @@ namespace FHE.Windows
             }
             else
             {
+                DomainMF curDomain = new DomainMF(this);
+                this.StackStep.Children.Insert(this.StackStep.Children.Count, curDomain);
+                this.Graphics.Title = CurrentNode.FullName;
                 return;
             }
 
             MembershipFunction mf = ParserXML.ParseXMLFileToMF(filename);
+
+            if (mf == null)
+            {
+                System.Windows.MessageBox.Show(this, "Открытый файл некорректен",
+            "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                DomainMF curDomain = new DomainMF(this);
+                this.StackStep.Children.Insert(this.StackStep.Children.Count, curDomain);
+                this.Graphics.Title = CurrentNode.FullName;
+                return;
+            }
 
             List<Point> points = new List<Point>();
             foreach (MFPoint mfpoint in mf.points)
@@ -128,7 +154,7 @@ namespace FHE.Windows
                 points.Add(new Point(mfpoint.x, mfpoint.y));
             }
 
-            if (!CheckMembershipFunction.Check(this.CurrentNode.textNode.Text, points, mf.StartX, mf.EndX, this))
+            if (!CheckMembershipFunction.Check(true, this.CurrentNode.textNode.Text, points, mf.StartX, mf.EndX, this))
             {
                 DomainMF curDomain = new DomainMF(this);
                 this.StackStep.Children.Insert(this.StackStep.Children.Count, curDomain);

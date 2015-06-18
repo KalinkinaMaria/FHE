@@ -33,7 +33,18 @@ namespace FHE
 
             foreach (string key in keys)
             {
-                resultFunction = resultFunction.Replace(key, args[key].ToString());
+                if (Convert.ToDouble(args[key].ToString()) < 0)
+                {
+                    resultFunction = resultFunction.Replace(key, '(' + args[key].ToString() + ')');
+                    resultFunction = resultFunction.Replace(key.ToLower(), '(' + args[key].ToString() + ')');
+                    resultFunction = resultFunction.Replace(key.ToUpper(), '(' + args[key].ToString() + ')');
+                }
+                else
+                {
+                    resultFunction = resultFunction.Replace(key, args[key].ToString());
+                    resultFunction = resultFunction.Replace(key.ToLower(), args[key].ToString());
+                    resultFunction = resultFunction.Replace(key.ToUpper(), args[key].ToString());
+                }
             }
             resultFunction = resultFunction.Replace(",", ".");
 

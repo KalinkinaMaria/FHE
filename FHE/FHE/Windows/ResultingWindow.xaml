@@ -4,7 +4,7 @@
         xmlns:my="clr-namespace:System.ComponentModel;assembly=System"
         xmlns:controls="clr-namespace:System.Windows.Controls"
         xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
-        Title="ResultingWindow" Height="400" Width="400">
+        Title="Результат вычисление" Height="400" Width="400">
     <Window.Resources>
         <my:BackgroundWorker
       x:Key="backgroundWoker"
@@ -39,7 +39,6 @@
         </chartingToolkit:Chart>
         <ProgressBar x:Name="ProgressCalculation" IsIndeterminate="False" Height="10" Width="200" Grid.Row="2"/>
         <StackPanel x:Name="StackDefinitionResults" Grid.Row="2" Visibility="Hidden" Orientation="Vertical"/>
-        <Button x:Name="SaveResults" Content="Сохранить результат" Grid.Row="3" Width="150" HorizontalAlignment="Left" Visibility="Hidden"/>
         <Button x:Name="StartCalculate" Content="Старт" Grid.Row="3" Width="100" HorizontalAlignment="Left" Click="StartCalculate_Click"/>
     </Grid>
 </Window>

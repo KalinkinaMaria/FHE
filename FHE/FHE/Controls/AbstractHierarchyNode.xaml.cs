@@ -251,6 +251,10 @@ namespace FHE.Controls
             {
                 setColorForm();
             }
+            if (CheckMembershipFunction.Check(false, this.Name, this.MembershipFunction, this.StartXMF, this.EndXMF, null))
+            {
+                this.formNode.Stroke = Brushes.White;
+            }
         }
     }
 }

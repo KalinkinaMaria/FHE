@@ -66,7 +66,7 @@ namespace FHE.Controls
             Point NewPoint = new Point(newX, newY);
             list.Add(NewPoint);
 
-            if (!CheckMembershipFunction.Check(this.Parent.CurrentNode.textNode.Text, list, Convert.ToDouble(this.Parent.AxisX.Minimum), Convert.ToDouble(this.Parent.AxisX.Maximum), this.Parent))
+            if (!CheckMembershipFunction.Check(true, this.Parent.CurrentNode.textNode.Text, list, Convert.ToDouble(this.Parent.AxisX.Minimum), Convert.ToDouble(this.Parent.AxisX.Maximum), this.Parent))
             {
                 list.Remove(NewPoint);
                 return;
@@ -81,16 +81,22 @@ namespace FHE.Controls
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            this.Parent.CurrentNode.MembershipFunction.Clear();
             foreach (Point point in this.Parent.PointsMF)
             {
                 this.Parent.CurrentNode.MembershipFunction.Add(point);
             }
+            this.Parent.CurrentNode.UnitMF = (this.Parent.StackStep.Children[0] as DomainMF).Unit.Text;
+            this.Parent.CurrentNode.StartXMF = Convert.ToDouble((this.Parent.StackStep.Children[0] as DomainMF).MinAxisX.Text);
+            this.Parent.CurrentNode.EndXMF = Convert.ToDouble((this.Parent.StackStep.Children[0] as DomainMF).MaxAxisX.Text);
+
             this.Parent.Close();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-
+            this.IsEnabled = false;
+            this.Parent.StackStep.Children[1].IsEnabled = true;
         }
     }
 }

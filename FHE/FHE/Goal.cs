@@ -21,6 +21,25 @@ namespace FHE
             this.Level = 1;
         }
 
+        private bool Intersection(double ax1, double ay1, double ax2, double ay2, double bx1, double by1, double bx2, double by2)
+        {
+            double v1,v2,v3,v4;
+
+            if (ax1 == bx1 && ay1 == by1 ||
+                ax1 == bx2 && ay1 == by2 ||
+                ax2 == bx1 && ay2 == by1 ||
+                ax2 == bx2 && ay2 == by2)
+            {
+                return true;
+            }
+
+            v1 = ( bx2 - bx1 ) * ( ay1 - by1 ) - ( by2 - by1 ) * ( ax1 - bx1 );
+            v2 = ( bx2 - bx1 ) * ( ay2 - by1 ) - ( by2 - by1 ) * ( ax2 - bx1 );
+            v3 = ( ax2 - ax1 ) * ( by1 - ay1 ) - ( ay2 - ay1 ) * ( bx1 - ax1 );
+            v4 = ( ax2 - ax1 ) * ( by2 - ay1 ) - ( ay2 - ay1 ) * ( bx2 - ax1 );
+            return (v1 * v2 < 0) && ( v3 * v4 < 0);
+        }
+
         private void culcResultGoal()
         {
             List<MFPoint> results = new List<MFPoint>();
@@ -28,49 +47,38 @@ namespace FHE
             //Найти пересечение
             for (int i = 0; i < desirabilityGoal.countPoints() - 1; i++)
             {
-                int begin = -1;
-                int end = -1;
                 for (int j = 0; j < achievementGoal.countPoints() - 1; j++)
                 {
-                    if (achievementGoal.getMFPoint(j).x >= desirabilityGoal.getMFPoint(i).x)
+                    if (Intersection(desirabilityGoal.getMFPoint(i).x, desirabilityGoal.getMFPoint(i).y, desirabilityGoal.getMFPoint(i+1).x, desirabilityGoal.getMFPoint(i+1).y,
+                        achievementGoal.getMFPoint(j).x, achievementGoal.getMFPoint(j).y, achievementGoal.getMFPoint(j+1).x, achievementGoal.getMFPoint(j+1).y))
                     {
-                        begin = j;
-                        break;
-                    }
-                }
-                for (int j = 0; j < achievementGoal.countPoints() - 1; j++)
-                {
-                    if (achievementGoal.getMFPoint(j).x > desirabilityGoal.getMFPoint(i).x)
-                    {
-                        end = j - 1;
-                        break;
-                    }
-                }
-                if (end != -1 && begin != -1 && (((desirabilityGoal.getMFPoint(i).y <= achievementGoal.getMFPoint(begin).y)
-                    && (desirabilityGoal.getMFPoint(i + 1).y >= achievementGoal.getMFPoint(end).y))
-                    || ((desirabilityGoal.getMFPoint(i).y >= achievementGoal.getMFPoint(begin).y)
-                    && (desirabilityGoal.getMFPoint(i + 1).y <= achievementGoal.getMFPoint(end).y))))
-                {
-
-                    if (Math.Abs(desirabilityGoal.getMFPoint(i).x - achievementGoal.getMFPoint(begin).x) + Math.Abs(desirabilityGoal.getMFPoint(i+1).x - achievementGoal.getMFPoint(begin).x)
-                        >= Math.Abs(desirabilityGoal.getMFPoint(i).x - achievementGoal.getMFPoint(end).x) + Math.Abs(desirabilityGoal.getMFPoint(i + 1).x - achievementGoal.getMFPoint(end).x))
-                    {
-                        results.Add(achievementGoal.getMFPoint(end));
-                    }
-                    else
-                    {
-                        results.Add(achievementGoal.getMFPoint(begin));
+                        if (Math.Abs(desirabilityGoal.getMFPoint(i).x - achievementGoal.getMFPoint(j).x) + Math.Abs(desirabilityGoal.getMFPoint(i + 1).x - achievementGoal.getMFPoint(j).x)
+                        >= Math.Abs(desirabilityGoal.getMFPoint(i).x - achievementGoal.getMFPoint(i).x) + Math.Abs(desirabilityGoal.getMFPoint(i + 1).x - achievementGoal.getMFPoint(i).x))
+                        {
+                            results.Add(achievementGoal.getMFPoint(j));
+                        }
+                        else
+                        {
+                            results.Add(achievementGoal.getMFPoint(j+1));
+                        }
                     }
                 }
             }
-
+            
             //Выбор максимального значения
-            resultGoal = results[0];
-            for (int i = 1; i < results.Count; i ++ )
+            if (results.Count == 0)
             {
-                if (results[i].y >= resultGoal.y)
+                resultGoal = null;
+            }
+            else
+            {
+                resultGoal = results[0];
+                for (int i = 1; i < results.Count; i++)
                 {
-                    resultGoal = results[i];
+                    if (results[i].y >= resultGoal.y)
+                    {
+                        resultGoal = results[i];
+                    }
                 }
             }
         }

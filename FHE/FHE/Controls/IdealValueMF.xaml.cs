@@ -44,8 +44,15 @@ namespace FHE.Controls
             this.Parent.MF.ItemsSource = this.Parent.PointsMF;
             this.IsEnabled = false;
 
-            PointsMF Points = new PointsMF(this.Parent);
-            this.Parent.StackStep.Children.Insert(this.Parent.StackStep.Children.Count, Points);
+            if (this.Parent.StackStep.Children.Count > 2)
+            {
+                this.Parent.StackStep.Children[2].IsEnabled = true;
+            }
+            else
+            {
+                PointsMF Points = new PointsMF(this.Parent);
+                this.Parent.StackStep.Children.Insert(this.Parent.StackStep.Children.Count, Points);
+            }              
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

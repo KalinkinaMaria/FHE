@@ -21,6 +21,7 @@ namespace FHE
         private static double CurrentStartX;
         private static double CurrentEndX;
         private static String CurrentUnit;
+        private static bool isNotDefaultTag;
 
         public static void SaveMFToFile(String filename, List<Point> points, String unit, double startX, double endX)
         {
@@ -60,6 +61,7 @@ namespace FHE
 
         public static MembershipFunction ParseXMLFileToMF(String filename)
         {
+            isNotDefaultTag = false;
             MembershipFunction mf = new MembershipFunction();
 
             XmlDocument XmlDoc = new XmlDocument();
@@ -72,6 +74,11 @@ namespace FHE
                 ParseXMLNodeToMF(Root);
             }
             catch (FormatException exept)
+            {
+                return null;
+            }
+
+            if (isNotDefaultTag)
             {
                 return null;
             }
@@ -127,6 +134,9 @@ namespace FHE
                         }
                     }
                     MF.addMFPoint(new MFPoint(x, y, CurrentUnit));
+                    break;
+                default:
+                    isNotDefaultTag = true;
                     break;
             }
         }
@@ -280,6 +290,7 @@ namespace FHE
 
         public static List<Goal> ParseXMLFile(String PathFile)
         {
+            isNotDefaultTag = false;
             List<Goal> goals = new List<Goal>();
 
             XmlDocument XmlDoc = new XmlDocument();
@@ -295,7 +306,10 @@ namespace FHE
             {
                 return null;
             }
-            
+            if (isNotDefaultTag)
+            {
+                return null;
+            }
 
             foreach (Goal goal in Goals.Values)
             {
@@ -474,6 +488,9 @@ namespace FHE
                     {
                         Characteristics[parent].AddChild(Characteristics[child]);
                     }
+                    break;
+                default:
+                    isNotDefaultTag = true;
                     break;
             }
             return true;

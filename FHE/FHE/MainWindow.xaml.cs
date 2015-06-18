@@ -131,6 +131,10 @@ namespace FHE
 
         private bool is_correct()
         {
+            HierarchyLevel FirstLevel;
+            HierarchyLevel LastLevel;
+            AbstractHierarchyNode lastNode;
+            AbstractHierarchyNode firstNode;
             bool result = true;
             int count = this.stackLevel.Children.Count;
             switch (mode)
@@ -169,21 +173,25 @@ namespace FHE
                             return result;
                         }
                     }
-                    HierarchyLevel FirstLevel = (this.stackLevel.Children[0] as HierarchyLevel);
+                    FirstLevel = (this.stackLevel.Children[0] as HierarchyLevel);
                     for (int i = 0; i < FirstLevel.stackNode.Children.Count; i++)
                     {
-                        if ((FirstLevel.stackNode.Children[i] as AbstractHierarchyNode).MembershipFunction.Count == 0)
+                        firstNode = (FirstLevel.stackNode.Children[i] as AbstractHierarchyNode);
+                        if (firstNode.MembershipFunction.Count == 0 ||
+                            !CheckMembershipFunction.Check(false, firstNode.Name, firstNode.MembershipFunction, firstNode.StartXMF, firstNode.EndXMF, this))
                         {
-                            System.Windows.MessageBox.Show(this, "Не для всех целей были введены ф-ции принадлежности.",
+                            System.Windows.MessageBox.Show(this, "Не для всех целей были введены правльные ф-ции принадлежности.",
                    "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
                             return false;
                         }
                     }
 
-                    HierarchyLevel LastLevel = (this.stackLevel.Children[this.stackLevel.Children.Count - 2] as HierarchyLevel);
+                    LastLevel = (this.stackLevel.Children[this.stackLevel.Children.Count - 2] as HierarchyLevel);
                     for (int i = 0; i < LastLevel.stackNode.Children.Count; i++)
                     {
-                        if ((LastLevel.stackNode.Children[i] as AbstractHierarchyNode).MembershipFunction.Count == 0)
+                        lastNode = (LastLevel.stackNode.Children[i] as AbstractHierarchyNode);
+                        if (lastNode.MembershipFunction.Count == 0 ||
+                            !CheckMembershipFunction.Check(false, lastNode.Name, lastNode.MembershipFunction, lastNode.StartXMF, lastNode.EndXMF, this))
                         {
                             System.Windows.MessageBox.Show(this, "Вершина " + (LastLevel.stackNode.Children[i] as AbstractHierarchyNode).textNode.Text + 
                                 " .Не введена функция принадлежности.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -274,29 +282,47 @@ namespace FHE
 
         private void print_node_for_MF()
         {
+            AbstractHierarchyNode firstNode;
+            AbstractHierarchyNode lastNode;
+
+            for (int i = 0; i < this.stackLevel.Children.Count - 1; i++)
+            {
+                HierarchyLevel Level = (this.stackLevel.Children[i] as HierarchyLevel);
+                for (int j = 0; j < Level.stackNode.Children.Count; j++)
+                {
+                    (Level.stackNode.Children[j] as AbstractHierarchyNode).formNode.Stroke = Brushes.White;
+                }
+            }
+
             HierarchyLevel FirstLevel = (this.stackLevel.Children[0] as HierarchyLevel);
             for (int i = 0; i < FirstLevel.stackNode.Children.Count; i++)
             {
-                (FirstLevel.stackNode.Children[i] as AbstractHierarchyNode).formNode.Fill = Brushes.Orange;
-                (FirstLevel.stackNode.Children[i] as AbstractHierarchyNode).IsNeedMF = true;
+                firstNode = (FirstLevel.stackNode.Children[i] as AbstractHierarchyNode);
+                if (firstNode.MembershipFunction.Count == 0)
+                {
+                    firstNode.formNode.Fill = Brushes.Orange;
+                }
+                firstNode.IsNeedMF = true;
+                if (!CheckMembershipFunction.Check(false, firstNode.Name, firstNode.MembershipFunction, firstNode.StartXMF, firstNode.EndXMF, this))
+                {
+                    firstNode.formNode.Stroke = Brushes.Red;
+                }
             }
 
             HierarchyLevel LastLevel = (this.stackLevel.Children[this.stackLevel.Children.Count - 2] as HierarchyLevel);
             for (int i = 0; i < LastLevel.stackNode.Children.Count; i++)
             {
-                (LastLevel.stackNode.Children[i] as AbstractHierarchyNode).formNode.Fill = Brushes.Orange;
-                (LastLevel.stackNode.Children[i] as AbstractHierarchyNode).IsNeedMF = true;
-            }
-
-            for (int i = 0; i < this.stackLevel.Children.Count - 1; i ++ )
-            {
-                HierarchyLevel Level = (this.stackLevel.Children[i] as HierarchyLevel);
-                for (int j = 0; j < Level.stackNode.Children.Count; j ++ )
+                lastNode = (LastLevel.stackNode.Children[i] as AbstractHierarchyNode);
+                if (lastNode.MembershipFunction.Count == 0)
                 {
-                    (Level.stackNode.Children[j] as AbstractHierarchyNode).formNode.Stroke = Brushes.White;
+                    lastNode.formNode.Fill = Brushes.Orange;
                 }
-            }
-            
+                lastNode.IsNeedMF = true;
+                if (!CheckMembershipFunction.Check(false, lastNode.Name, lastNode.MembershipFunction, lastNode.StartXMF, lastNode.EndXMF, this))
+                {
+                    lastNode.formNode.Stroke = Brushes.Red;
+                }
+            }            
         }
 
         private void Mode_Down(object sender, RoutedEventArgs e)
@@ -364,7 +390,7 @@ namespace FHE
 
             List<Goal> Nodes = ParserXML.ParseXMLFile(filename);
 
-            if (Nodes == null)
+            if (Nodes == null || Nodes.Count == 0)
             {
                 System.Windows.MessageBox.Show(this, "Некорректный входной файл.",
             "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);

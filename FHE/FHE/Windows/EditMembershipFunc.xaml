@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:System.Windows.Controls"
         xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
-        Title="EditMembershipFunc" Height="400" Width="550">
+        Title="Редактирование функции принадлежности" Height="400" Width="550">
     <Grid>
         <Grid x:Name="gridFunc">
             <Grid.RowDefinitions>
