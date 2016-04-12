@@ -14,9 +14,26 @@ namespace FHE.Controls
         {
             List<String> current_args = new List<String>();
 
+            if (function.Length == 0)
+            {
+                return false;
+            }
+
             //Проверить введенную функцию
             if (!check(viewMessage, nameNode, function, owner))
                 return false;
+
+            //Проверка последнего символа
+            if (function[function.Length - 1] == '+' || function[function.Length - 1] == '-' || function[function.Length - 1] == '*' || function[function.Length - 1] == '/'
+                || function[function.Length - 1] == '.' || function[function.Length - 1] == '(' || function[function.Length - 1] == '^')
+            {
+                if (viewMessage)
+                {
+                    System.Windows.MessageBox.Show(owner, "Вершина " + nameNode + ". Синтаксическая ошибка: неверный последний символ",
+                       "Внимание", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                return false;
+            }
 
             //Количество скобок
             string str = function;
@@ -91,6 +108,7 @@ namespace FHE.Controls
                     }
                     return false;
                 }
+                available = false;
                 while (current_args.Remove(args_copy[i])) ;
             }
 

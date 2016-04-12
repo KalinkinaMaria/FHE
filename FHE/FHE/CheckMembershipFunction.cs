@@ -14,7 +14,10 @@ namespace FHE
             bool isDownturn = false;
 
             //Сортировка
-            sortPoint(0, points.Count - 1, points);
+            if (points.Count != 0)
+            {
+                sortPoint(0, points.Count - 1, points);
+            }
 
             for (int i = 1; i < points.Count; i ++ )
             {
